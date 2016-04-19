@@ -1,0 +1,33 @@
+{
+	"name": "lionar/file-system",
+	"description": "A very readable file system API",
+	"keywords": [ "lionar", "component", "File system" ],
+	"license": "MIT",
+	"authors": [
+		{
+            			"name": "Aron Wouters",
+            			"email": "lionar@mail.com",
+            			"role": "Developer"
+	    	}
+	],
+	"require" : {
+		"php": ">=5.5.9"
+  	},
+	"require-dev": {
+		"lionar/testing": "*"
+	},
+	"autoload": {
+	    	"psr-4": {
+			"Lionar\\FileSystem\\": "source"
+	    	}
+  	},
+	"autoload-dev": {
+    		"psr-4": {
+			"Lionar\\FileSystem\\Tests\\": "tests"
+		}
+    	},
+	"config": {
+		"preferred-install": "dist"
+	},
+	"minimum-stability": "dev"
+}
