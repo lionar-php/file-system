@@ -2,8 +2,8 @@
 
 namespace Lionar\FileSystem\Tests;
 
-use Lionar\FileSystem\File; 
-use Lionar\Testing\TestCase;
+use 	Lionar\FileSystem\File,
+	Lionar\Testing\TestCase;
 
 class FileTest extends TestCase
 {
