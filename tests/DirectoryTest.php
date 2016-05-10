@@ -3,6 +3,7 @@
 namespace Lionar\FileSystem\Tests;
 
 use 	Lionar\FileSystem\Directory,
+	Lionar\FileSystem\File,
 	Lionar\Testing\TestCase,
 	org\bovigo\vfs\vfsStream as VfsStream;
 
@@ -66,6 +67,27 @@ class DirectoryTest extends TestCase
 		$directory = new Directory ( $existentDirectory );
 		assertThat( $directory->path, is ( identicalTo ( $existentDirectory ) ) );
 	}
+
+	/**
+	 * @test
+	 */
+	public function __construct_withExistentDirectory_setsFilesOnDirectoryObject ( )
+	{
+		$files = array ( 
+		              new File ( 'vfs://root/Core\AbstractFactory\test.php' ),
+		              new File ( 'vfs://root/Core\AbstractFactory\other.php' ),
+		              new File ( 'vfs://root/Core\AbstractFactory\Invalid.csv' ),
+		               new File ( 'vfs://root/Core\badlocation.php' ),
+		);
+		$directory = new Directory ( VfsStream::url ( 'root/Core' ) );
+		assertThat( $directory->files, is ( arrayContainingInAnyOrder ( $files ) ) );
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Data providers
+	|--------------------------------------------------------------------------
+	*/
 
 	public function existentDirectories ( )
 	{

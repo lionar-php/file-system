@@ -2,10 +2,11 @@
 
 namespace Lionar\FileSystem\Tests;
 
-use Lionar\FileSystem\File;
-use Lionar\FileSystem\LocalFileSystem;
-use Lionar\Testing\TestCase;
-use org\bovigo\vfs\vfsStream as VfsStream;
+use 	Lionar\FileSystem\File,
+	Lionar\FileSystem\LocalFileSystem,
+	Lionar\Testing\TestCase,
+	Mockery,
+	org\bovigo\vfs\vfsStream as VfsStream;
 
 class LocalFileSystemTest extends TestCase
 {
@@ -14,7 +15,10 @@ class LocalFileSystemTest extends TestCase
              		'dashboard.php' => '',
              		'blog' => array (
                 		'post.php' => '',
-                		'author.php' => ''
+                		'author.php' => '',
+                		'permissions' => array (
+                		                        'authors permissions.php' => ''
+                		),
              		)
 	);
 
@@ -22,26 +26,7 @@ class LocalFileSystemTest extends TestCase
 	{
 		VfsStream::setup ( 'root' );
 		$root = VfsStream::create ( $this->directoryStructure );
-		$this->fileSystem = new LocalFileSystem ( VfsStream::url( $root->getName ( ) ) );
-	}
-
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 * @dataProvider nonStringValues
-	 */
-	public function findFilesIn_withNonStringValue_throwsInvalidArgumentException ( $value )
-	{
-		$this->fileSystem->findFilesIn ( $value );
-	}
-
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 */
-	public function findFilesIn_withNonExistentDirectory_throwsInvalidArgumentException ( )
-	{
-		$this->fileSystem->findFilesIn ( VfsStream::url( 'non existent directory' ) );
+		$this->fileSystem = new LocalFileSystem;
 	}
 
 	/**
@@ -49,10 +34,12 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function findFilesIn_withExistentDirectoryForDirectoryArgument_returnsAllFilesInThatDirectory ( )
 	{
-		
+		$allFilesInDirectory =  array ( new File ( 'vfs://root/blog\post.php' ), new File ( 'vfs://root/blog\author.php' ), new File ( 'vfs://root/blog\permissions\authors permissions.php' ) );
 		$expectedFiles = array ( new File ( 'vfs://root/blog\post.php' ), new File ( 'vfs://root/blog\author.php' ) );
-		$files = $this->fileSystem->findFilesIn ( 'blog' );
-
-		assertThat( $files, is ( arrayContainingInAnyOrder ( $expectedFiles ) ) );
+		
+		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( VfsStream::url ( 'root/blog' ) ) );
+		$directory->files = $allFilesInDirectory;
+		$files = $this->fileSystem->findFilesIn ( $directory );
+		assertThat ( $files, is ( equalTo( $expectedFiles ) ) );
 	}
 }
