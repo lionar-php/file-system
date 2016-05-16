@@ -29,15 +29,6 @@ class FileTest extends TestCase
 
 	/**
 	 * @test
-	 * @expectedException InvalidArgumentException
-	 */
-	public function __construct_withNonValidPathValue_throwsException (  )
-	{
-		$file = new File ( 'something without extension' );
-	}
-
-	/**
-	 * @test
 	 */
 	public function __construct_withValidPathValue_setsPathOnTheFile (  )
 	{

@@ -10,11 +10,11 @@ class File
 
 	public function __construct ( $path )
 	{
-		if ( ! is_string ( $path ) or empty ( $extension = pathinfo( $path, PATHINFO_EXTENSION ) ) )
-			throw new InvalidArgumentException ( 'The file path you provided is invalid' );
+		if ( ! is_string ( $path ) )
+			throw new InvalidArgumentException ( 'The file path must be a string' );
 		
 		$this->path = $path;
-		$this->extension = $extension;
+		$this->extension =  pathinfo( $path, PATHINFO_EXTENSION );
 	}
 
 	public function __toString (  )
