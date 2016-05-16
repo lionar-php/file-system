@@ -41,4 +41,19 @@ class LocalFileSystemTest extends TestCase
 		$files = $this->fileSystem->findFilesIn ( $directory );
 		assertThat ( $files, is ( equalTo( $allFilesInDirectory ) ) );
 	}
+
+	/**
+	 * @test
+	 */
+	public function findFilesDirectlyIn_withExistentDirectoryForDirectoryArgument_returnsAllFilesDirectlyInThatDirectory ( )
+	{
+		$allFilesInDirectory =  array ( new File ( 'vfs://root/blog\post.php' ), new File ( 'vfs://root/blog\author.php' ), new File ( 'vfs://root/blog\permissions\authors permissions.php' ) );
+		$expectedFiles =  array ( new File ( 'vfs://root/blog\post.php' ), new File ( 'vfs://root/blog\author.php' ) );
+
+
+		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( VfsStream::url ( 'root/blog' ) ) );
+		$directory->files = $allFilesInDirectory;
+		$files = $this->fileSystem->findFilesDirectlyIn ( $directory );
+		assertThat ( $files, is ( equalTo( $expectedFiles ) ) );
+	}
 }

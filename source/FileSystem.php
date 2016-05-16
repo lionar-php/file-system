@@ -12,5 +12,13 @@ interface FileSystem
 	 * @param  Directory $directory 	The directory to search files in
 	 * @return array            		An array of files found in the directory
 	 */
-	public function findFilesIn ( Directory $directory );
+	public function findFilesIn ( Directory $directory ) : array;
+
+	/**
+	 * Find all the files directly inside a directory.
+	 * 
+	 * @param  Directory $directory 	The directory to search files in
+	 * @return array            		An array of files found directly inside the directory
+	 */
+	public function findFilesDirectlyIn ( Directory $directory ) : array;
 }

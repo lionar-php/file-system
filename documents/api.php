@@ -5,7 +5,7 @@ use 	Lionar\FileSystem\Directory,
 
 require __DIR__ . '/vendor/autoload.php';
 
-$directory = new Directory ( __DIR__ . '/vendor' );
+$directory = new Directory ( __DIR__ . '/../vendor' );
 // echo $directory->path;
 // var_dump($directory->files);
 
