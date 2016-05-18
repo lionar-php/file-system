@@ -2,13 +2,13 @@
 
 namespace Lionar\FileSystem\Tests;
 
-use 	Lionar\FileSystem\File,
-	Lionar\FileSystem\LocalFileSystem,
+use 	Lionar\FileSystem\Directories\LocalDirectory,
+	Lionar\FileSystem\File,
+	Lionar\FileSystem\FileSystem,
 	Lionar\Testing\TestCase,
-	Mockery,
 	org\bovigo\vfs\vfsStream as VfsStream;
 
-class LocalFileSystemTest extends TestCase
+class FileSystemTest extends TestCase
 {
 	private $fileSystem = null;
 	private $directoryStructure = array (
@@ -26,7 +26,7 @@ class LocalFileSystemTest extends TestCase
 	{
 		VfsStream::setup ( 'root' );
 		$root = VfsStream::create ( $this->directoryStructure );
-		$this->fileSystem = new LocalFileSystem;
+		$this->fileSystem = new FileSystem;
 	}
 
 	/**
@@ -35,9 +35,8 @@ class LocalFileSystemTest extends TestCase
 	public function findFilesIn_withExistentDirectoryForDirectoryArgument_returnsAllFilesInThatDirectory ( )
 	{
 		$allFilesInDirectory =  array ( new File ( 'vfs://root/blog\post.php' ), new File ( 'vfs://root/blog\author.php' ), new File ( 'vfs://root/blog\permissions\authors permissions.php' ) );
-		
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( VfsStream::url ( 'root/blog' ) ) );
-		$directory->files = $allFilesInDirectory;
+		$directory = new LocalDirectory ( VfsStream::url ( 'root/blog' ) );
+
 		$files = $this->fileSystem->findFilesIn ( $directory );
 		assertThat ( $files, is ( equalTo( $allFilesInDirectory ) ) );
 	}
@@ -51,8 +50,7 @@ class LocalFileSystemTest extends TestCase
 		$expectedFiles =  array ( new File ( 'vfs://root/blog\post.php' ), new File ( 'vfs://root/blog\author.php' ) );
 
 
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( VfsStream::url ( 'root/blog' ) ) );
-		$directory->files = $allFilesInDirectory;
+		$directory = new LocalDirectory ( VfsStream::url ( 'root/blog' ) );
 		$files = $this->fileSystem->findFilesDirectlyIn ( $directory );
 		assertThat ( $files, is ( equalTo( $expectedFiles ) ) );
 	}

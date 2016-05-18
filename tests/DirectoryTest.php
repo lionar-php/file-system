@@ -2,9 +2,8 @@
 
 namespace Lionar\FileSystem\Tests;
 
-use 	Lionar\FileSystem\Directory,
-	Lionar\FileSystem\File,
-	Lionar\Testing\TestCase,
+use 	Lionar\Testing\TestCase,
+	Mockery,
 	org\bovigo\vfs\vfsStream as VfsStream;
 
 class DirectoryTest extends TestCase
@@ -36,7 +35,7 @@ class DirectoryTest extends TestCase
 	 */
 	public function __construct_withNonStringValue_throwsInvalidArgumentException ( $value )
 	{
-		$directory = new Directory ( $value );
+		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( $value ) );
 	}
 
 	/**
@@ -45,7 +44,7 @@ class DirectoryTest extends TestCase
 	 */
 	public function __construct_withEmptyStringValue_throwsInvalidArgumentException ( )
 	{
-		$directory = new Directory ( '' );
+		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( '' ) );
 	}
 
 	/**
@@ -55,7 +54,7 @@ class DirectoryTest extends TestCase
 	public function __construct_withNonExistingDirectory_throwsInvalidArgumentException ( )
 	{
 		$nonExistentDirectory = VfsStream::url ( 'root/nonExistentDirectory' );
-		$directory = new Directory ( $nonExistentDirectory );
+		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( $nonExistentDirectory ) );
 	}
 
 	/**
@@ -64,23 +63,8 @@ class DirectoryTest extends TestCase
 	 */
 	public function __construct_withExistentDirectory_setsPathOnDirectoryObject ( $existentDirectory )
 	{
-		$directory = new Directory ( $existentDirectory );
+		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( $existentDirectory ) );
 		assertThat( $directory->path, is ( identicalTo ( $existentDirectory ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function __construct_withExistentDirectory_setsFilesOnDirectoryObject ( )
-	{
-		$files = array ( 
-		              new File ( 'vfs://root/Core\AbstractFactory\test.php' ),
-		              new File ( 'vfs://root/Core\AbstractFactory\other.php' ),
-		              new File ( 'vfs://root/Core\AbstractFactory\Invalid.csv' ),
-		               new File ( 'vfs://root/Core\badlocation.php' ),
-		);
-		$directory = new Directory ( VfsStream::url ( 'root/Core' ) );
-		assertThat( $directory->files, is ( arrayContainingInAnyOrder ( $files ) ) );
 	}
 
 	/*

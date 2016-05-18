@@ -2,23 +2,21 @@
 
 namespace Lionar\FileSystem;
 
-use InvalidArgumentException;
-
-interface FileSystem
+class FileSystem
 {
-	/**
-	 * Find all the files inside a directory. This function searches nested directories too
-	 * 
-	 * @param  Directory $directory 	The directory to search files in
-	 * @return array            		An array of files found in the directory
-	 */
-	public function findFilesIn ( Directory $directory ) : array;
+	public function findFilesIn ( Directory $directory )
+	{
+		return $directory->files;
+	}
 
-	/**
-	 * Find all the files directly inside a directory.
-	 * 
-	 * @param  Directory $directory 	The directory to search files in
-	 * @return array            		An array of files found directly inside the directory
-	 */
-	public function findFilesDirectlyIn ( Directory $directory ) : array;
+	public function findFilesDirectlyIn ( Directory $directory ) : array
+	{
+		$files = array ( );
+
+		foreach ( $directory->files as $file )
+			if ( dirname ( $file ) === $directory->path )
+				$files [ ] = $file;
+			
+		return $files;
+	}
 }

@@ -2,14 +2,12 @@
 
 namespace Lionar\FileSystem;
 
-use 	InvalidArgumentException,
-	RecursiveDirectoryIterator,
-	RecursiveIteratorIterator;
+use InvalidArgumentException;
 
-class Directory
+abstract class Directory
 {
-	private $path = '';
-	private $files = array ( );
+	protected $path = '';
+	protected $files = array ( );
 
 	public function __construct ( $path )
 	{
@@ -25,14 +23,5 @@ class Directory
 			return $this-> { $property };
 	}
 
-	private function getFilesFrom ( $path )
-	{
-  		foreach ( new RecursiveIteratorIterator ( new RecursiveDirectoryIterator( $path ) ) as $fileName )
-  		{
-		    	if ( $fileName->isDir ( ) ) 
-		    		continue;
-		    	$files [ ] = new File ( ( string ) $fileName );
-  		}
-		return $files;
-	}
+	abstract protected function getFilesFrom ( $path );
 }

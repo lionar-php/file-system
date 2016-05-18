@@ -3,7 +3,8 @@
 namespace Lionar\FileSystem\Tests;
 
 use 	Lionar\FileSystem\File,
-	Lionar\Testing\TestCase;
+	Lionar\Testing\TestCase,
+	org\bovigo\vfs\vfsStream as Vfs;
 
 class FileTest extends TestCase
 {
@@ -12,6 +13,8 @@ class FileTest extends TestCase
 
 	public function setUp (  )
 	{
+		$this->root = Vfs::setup( 'root' );
+        		Vfs::newFile( 'file.txt' )->at( $this->root )->setContent( 'The new contents of the file' );
 		$this->path = 'directory/file.txt';
 		$this->extension = 'txt';
 		$this->file = new File ( $this->path );
@@ -46,9 +49,9 @@ class FileTest extends TestCase
 	/**
 	 * @test
 	 */
-	public function __construct_withArrayForContent_setsArrayAsContentOntoFileObject (  )
+	public function __construct_withContent_setsContentOntoFileObject (  )
 	{
-		$contents = array( 'my content', 'my second line of content' );
+		$contents = 'my content';
 		$file = new File ( 'directory/file', $contents );
 		assertThat ( $file->contents, is ( identicalTo ( $contents ) ) );
 	}
@@ -56,33 +59,11 @@ class FileTest extends TestCase
 	/**
 	 * @test
 	 */
-	public function __construct_withSingleValueForContent_setsSingleValueInArrayAsContentOntoFileObject (  )
+	public function __construct_withContent_serializesContentIntoFile (  )
 	{
 		$contents = 'my content';
-		$file = new File ( 'directory/file', $contents );
-		assertThat ( $file->contents, is ( arrayContaining ( $contents ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function append_withArrayForContent_addsArrayAsContentOntoFileObject (  )
-	{
-		$contents = array( 'my content', 'my second line of content' );
-		$file = new File ( 'directory/file', 'initial content' );
-		$file->append ( $contents );
-		assertThat ( $file->contents, is ( arrayContaining ( array ( 'initial content', 'my content', 'my second line of content' ) ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function append_withSingleValueForContent_setsSingleValueInArrayAsContentOntoFileObject (  )
-	{
-		$contents = 'my content';
-		$file = new File ( 'directory/file', 'initial content' );
-		$file->append ( $contents );
-		assertThat ( $file->contents, is ( arrayContaining ( array ( 'initial content', 'my content' ) ) ) );
+		$file = new File ( Vfs::url ( 'root/file.txt' ), $contents );
+		assertThat ( file_get_contents( $file ), is ( identicalTo ( serialize( $contents ) ) ) );
 	}
 
 	/**
@@ -92,4 +73,12 @@ class FileTest extends TestCase
 	{
 		assertThat( $this->file->__toString( ), is ( identicalTo ( $this->path ) ) );
 	}
+
+	// /**
+	//  * @test
+	//  */
+	// public function overwrite_withContent_serializesContentAndOverwritesFile ( )
+	// {
+
+	// }
 }
