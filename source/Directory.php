@@ -2,26 +2,37 @@
 
 namespace Lionar\FileSystem;
 
-use InvalidArgumentException;
-
-abstract class Directory
+class Directory extends Object
 {
-	protected $path = '';
-	protected $files = array ( );
+	public $objects = array ( );
 
-	public function __construct ( $path )
+	public function add ( Object $object )
 	{
-		if ( ! is_string ( $path ) or empty ( $path ) or ! is_dir( $path ) )
-			throw new InvalidArgumentException ( 'you did not provide a string that can be resolved as a directory' );
-		$this->path = $path;
-		$this->files = $this->getFilesFrom ( $path );
+		$this->objects [ ] = $object;
+		if ( ! $object->parent == $this )
+			$object->moveTo ( $this );
 	}
 
-	public function __get ( $property )
+	public function moveTo ( Directory $directory )
 	{
-		if ( isset ( $this-> { $property } ) )
-			return $this-> { $property };
+		parent::moveTo ( $directory );
+		foreach ( $this->objects as $object )
+			$object->moveTo ( $this );
 	}
 
-	abstract protected function getFilesFrom ( $path );
+	public function has ( Object $object )
+	{
+		return in_array ( $object, $this->objects );
+	}
+
+	public function remove ( Object $object )
+	{
+		if ( ! $this->has ( $object ) )
+			return;
+
+		$key = array_search ( $object, $this->objects );
+		$object = $this->objects [ $key ];
+		unset ( $this->objects [ $key ] );
+		$object->removeFromParent ( );
+	}
 }

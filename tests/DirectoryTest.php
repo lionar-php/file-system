@@ -2,82 +2,121 @@
 
 namespace Lionar\FileSystem\Tests;
 
-use 	Lionar\Testing\TestCase,
-	Mockery,
-	org\bovigo\vfs\vfsStream as VfsStream;
+use Lionar\FileSystem\Directory,
+	Lionar\Testing\TestCase,
+	Mockery;
 
 class DirectoryTest extends TestCase
 {
-	private $root = null;
-
-	private $structure = array(
-      		'Core' => array(
-        			'AbstractFactory' => array(
-          				'test.php'    => 'some text content',
-          				'other.php'   => 'Some more text content',
-          				'Invalid.csv' => 'Something else',
-         			),
-        			'AnEmptyFolder'   => array(),
-        			'badlocation.php' => 'some bad content',
-      		)
-    	);
-
-	public function setUp ( )
+	/*
+	|--------------------------------------------------------------------------
+	| Add
+	|--------------------------------------------------------------------------
+	*/
+	/**
+	 * @test
+	 */
+	public function add_withObject_addsObjectToDirectory ( )
 	{
-		VfsStream::setup ( 'root' );
-		$this->root = VfsStream::create ( $this->structure );
+		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object' )->shouldIgnoreMissing ( );
+		$directory = new Directory ( 'application' );
+		$directory->add ( $object );
+		assertThat ( $directory->objects, hasItemInArray ( $object ) );
 	}
 
 	/**
 	 * @test
-	 * @expectedException InvalidArgumentException
-	 * @dataProvider nonStringValues
 	 */
-	public function __construct_withNonStringValue_throwsInvalidArgumentException ( $value )
+	public function add_withObject_callsObjectMoveToMethod ( )
 	{
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( $value ) );
+		$directory = new Directory ( 'name' );
+		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object' );
+
+		$object->shouldReceive ( 'moveTo' )->once ( );
+		$directory->add ( $object );
 	}
 
 	/**
 	 * @test
-	 * @expectedException InvalidArgumentException
 	 */
-	public function __construct_withEmptyStringValue_throwsInvalidArgumentException ( )
+	public function add_withObjectThatAlreadyHasDirectoryAsParent_doesNotCallObjectMoveToMethod ( )
 	{
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( '' ) );
-	}
-
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 */
-	public function __construct_withNonExistingDirectory_throwsInvalidArgumentException ( )
-	{
-		$nonExistentDirectory = VfsStream::url ( 'root/nonExistentDirectory' );
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( $nonExistentDirectory ) );
-	}
-
-	/**
-	 * @test
-	 * @dataProvider existentDirectories
-	 */
-	public function __construct_withExistentDirectory_setsPathOnDirectoryObject ( $existentDirectory )
-	{
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( $existentDirectory ) );
-		assertThat( $directory->path, is ( identicalTo ( $existentDirectory ) ) );
+		$directory = new Directory ( 'name' );
+		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object[]', array ( 'object name', $directory ) );
+		$object->shouldNotReceive ( 'moveTo' );
+		$directory->add ( $object );
 	}
 
 	/*
 	|--------------------------------------------------------------------------
-	| Data providers
+	| Has
+	|--------------------------------------------------------------------------
+	*/
+	/**
+	 * @test
+	 */
+	public function has_whenDirectoryDoesNotHaveObject_returnsFalse ( )
+	{
+		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object', array ( 'name' ) );
+		$directory = new Directory ( 'application' );
+		assertThat( $directory->has ( $object ), is ( false ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function has_whenDirectoryDoesHaveObject_returnsTrue ( )
+	{
+		$directory = new Directory ( 'application' );
+		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object[]', array ( 'name', $directory ) )->shouldIgnoreMissing ( );
+		assertThat( $directory->has ( $object ), is ( true ) );
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Remove
 	|--------------------------------------------------------------------------
 	*/
 
-	public function existentDirectories ( )
+	/**
+	 * @test
+	 */
+	public function remove_withObjectThatExistsInDirectory_removesObjectFromDirectory ( )
 	{
-		return array ( 
-		              array ( VfsStream::url ( 'root/Core' ) ),
-		              array ( VfsStream::url ( 'root/Core/AbstractFactory' ) ),
-		);
+		$directory = new Directory ( 'application' );
+		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object[]', array ( 'name', $directory ) );
+		$directory->remove ( $object );
+		assertThat ( $directory->objects, noneOf ( contains ( $object ) ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function remove_withObjectThatExistsInDirectory_callsObjectRemoveFromMethod ( )
+	{
+		$directory = new Directory ( 'application' );
+		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object' )->shouldIgnoreMissing ( );
+		$object->shouldReceive ( 'removeFromParent' )->once ( );
+		$directory->add ( $object );
+		$directory->remove ( $object );
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Move to
+	|--------------------------------------------------------------------------
+	*/
+
+	/**
+	 * @test
+	 */
+	public function moveTo_withDirectoryForNewParent_alsoModifiesDirectoryObjectPath ( )
+	{
+		$newParent = new Directory ( 'root' );
+		$application = new Directory ( 'application' );
+		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object[]', array ( 'object' ) );
+		$application->add ( $object );
+		$application->moveTo ( $newParent );
+		assertThat ( $object->path, is ( identicalTo ( 'root/application/object' ) ) );
 	}
 }

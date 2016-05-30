@@ -2,19 +2,16 @@
 
 namespace Lionar\FileSystem\Tests;
 
-use 	Lionar\FileSystem\File,
+use Lionar\FileSystem\File,
 	Lionar\Testing\TestCase;
 
 class FileTest extends TestCase
 {
 	private $file = null;
-	private $path, $extension = '';
 
-	public function setUp (  )
+	public function setUp ( )
 	{
-		$this->path = 'directory/file.txt';
-		$this->extension = 'txt';
-		$this->file = new File ( $this->path );
+		$this->file = new File ( 'file-name.php' );
 	}
 
 	/**
@@ -22,74 +19,34 @@ class FileTest extends TestCase
 	 * @expectedException InvalidArgumentException
 	 * @dataProvider nonStringValues
 	 */
-	public function __construct_withNonStringValueForPath_throwsException ( $value )
+	public function write_withNonStringValue_throwsException ( $value )
 	{
-		$file = new File ( $value );
+		$this->file->write ( $value );
 	}
 
 	/**
 	 * @test
+	 * @dataProvider contents
 	 */
-	public function __construct_withValidPathValue_setsPathOnTheFile (  )
+	public function write_withString_setsStringasContentOnFile ( $content )
 	{
-		assertThat( $this->file->path, is ( identicalTo ( $this->path ) ) );
+		$this->file->write ( $content );
+		assertThat ( $this->file->content, is ( identicalTo ( $content ) ) );
 	}
 
-	/**
-	 * @test
-	 */
-	public function __construct_withValidPathValue_setsExtensionOnTheFile (  )
-	{
-		assertThat( $this->file->extension, is ( identicalTo ( $this->extension ) ) );
-	}
+	/*
+	|--------------------------------------------------------------------------
+	| Data providers
+	|--------------------------------------------------------------------------
+	*/
 
-	/**
-	 * @test
-	 */
-	public function __construct_withArrayForContent_setsArrayAsContentOntoFileObject (  )
+	public function contents ( )
 	{
-		$contents = array( 'my content', 'my second line of content' );
-		$file = new File ( 'directory/file', $contents );
-		assertThat ( $file->contents, is ( identicalTo ( $contents ) ) );
-	}
+		return array (
 
-	/**
-	 * @test
-	 */
-	public function __construct_withSingleValueForContent_setsSingleValueInArrayAsContentOntoFileObject (  )
-	{
-		$contents = 'my content';
-		$file = new File ( 'directory/file', $contents );
-		assertThat ( $file->contents, is ( arrayContaining ( $contents ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function append_withArrayForContent_addsArrayAsContentOntoFileObject (  )
-	{
-		$contents = array( 'my content', 'my second line of content' );
-		$file = new File ( 'directory/file', 'initial content' );
-		$file->append ( $contents );
-		assertThat ( $file->contents, is ( arrayContaining ( array ( 'initial content', 'my content', 'my second line of content' ) ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function append_withSingleValueForContent_setsSingleValueInArrayAsContentOntoFileObject (  )
-	{
-		$contents = 'my content';
-		$file = new File ( 'directory/file', 'initial content' );
-		$file->append ( $contents );
-		assertThat ( $file->contents, is ( arrayContaining ( array ( 'initial content', 'my content' ) ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function __toString_whenAValidPathHasBeenSet_returnsTheFilePath (  )
-	{
-		assertThat( $this->file->__toString( ), is ( identicalTo ( $this->path ) ) );
+			array ( 'helloo' ),
+			array ( 'my content' ),
+			array ( '' )
+		);
 	}
 }
