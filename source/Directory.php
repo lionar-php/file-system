@@ -4,7 +4,7 @@ namespace Lionar\FileSystem;
 
 class Directory extends Object
 {
-	public $objects = array ( );
+	private $objects = array ( );
 
 	public function add ( Object $object )
 	{
@@ -34,5 +34,11 @@ class Directory extends Object
 		$object = $this->objects [ $key ];
 		unset ( $this->objects [ $key ] );
 		$object->removeFromParent ( );
+	}
+
+	public function __get ( $property )
+	{
+		if ( isset ( $this-> { $property } ) )
+			return $this-> { $property };
 	}
 }

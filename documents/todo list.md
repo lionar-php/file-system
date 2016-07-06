@@ -10,3 +10,7 @@
 - File contents; appending, prepending
 - Renaming objects
 - Refactor the tests
+
+- File tree finding capabilities ( or a finder )
+- Automate file tree syncing
+- Maybe some way to couple file tree to file system to prevent mistakes
