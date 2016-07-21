@@ -10,7 +10,7 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Eyedouble messages test suite">
+        <testsuite name="file-system">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

@@ -1,7 +1,7 @@
 {
 	"name": "lionar/file-system",
 	"description": "A very readable file system API",
-	"keywords": [ "lionar", "component", "File system" ],
+	"keywords": [ "Lionar", "Component", "File system" ],
 	"license": "MIT",
 	"authors": [
 		{

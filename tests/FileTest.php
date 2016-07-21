@@ -16,6 +16,15 @@ class FileTest extends TestCase
 
 	/**
 	 * @test
+	 */
+	public function __construct_withNameWithExtension_setsExtensionOnFile ( )
+	{
+		$file = new File ( 'dashboard.php' );
+		assertThat ( $file->extension, is ( identicalTo ( 'php' ) ) );
+	}
+
+	/**
+	 * @test
 	 * @expectedException InvalidArgumentException
 	 * @dataProvider nonStringValues
 	 */

@@ -6,7 +6,13 @@ use InvalidArgumentException;
 
 class File extends Object
 {
-	private $content = '';
+	private $content, $extension = '';
+
+	public function __construct ( $name, Directory $parent = null )
+	{
+		parent::__construct ( $name, $parent );
+		$this->extension = pathinfo ( $name, PATHINFO_EXTENSION );
+	}
 
 	public function write ( $content )
 	{
