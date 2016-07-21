@@ -25,6 +25,14 @@ class FileTest extends TestCase
 
 	/**
 	 * @test
+	 */
+	public function __toString_whenPathIsSet_returnsFilePath ( )
+	{
+		assertThat( ( string ) $this->file, is ( identicalTo ( 'file-name.php' ) ) );
+	}
+
+	/**
+	 * @test
 	 * @expectedException InvalidArgumentException
 	 * @dataProvider nonStringValues
 	 */

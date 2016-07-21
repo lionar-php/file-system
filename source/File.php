@@ -26,4 +26,9 @@ class File extends Object
 		if ( isset ( $this-> { $property } ) )
 			return $this-> { $property };
 	}
+
+	public function __toString ( )
+	{
+		return $this->path;
+	}
 }
