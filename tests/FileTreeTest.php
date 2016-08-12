@@ -77,7 +77,7 @@ class FileTreeTest extends TestCase
 	{
 		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object', array ( 'object' ) );
 		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( 'directory' ) );
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File', array ( 'file' ) );
+		$file = Mockery::mock ( 'Lionar\\FileSystem\\File[]', array ( 'file' ) );
 
 		return array (
 			array ( array ( ), array ( ) ),

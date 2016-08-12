@@ -27,6 +27,7 @@ abstract class Object
 
 	public function moveTo ( Directory $directory )
 	{
+		// $this->actions [ 'move' ] [ $this->path ] = array ( $this, $this->parent )
 		$this->removeFromParent ( );
 		$this->parent = $directory;
 		if ( ! $directory->has ( $this ) )

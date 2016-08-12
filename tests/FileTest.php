@@ -25,6 +25,16 @@ class FileTest extends TestCase
 
 	/**
 	 * @test
+	 * @dataProvider contents
+	 */
+	public function __construct_withContent_setsContentOnFileObject ( $content )
+	{
+		$file = new File ( 'mock name', null, $content );
+		assertThat ( $file->content, is ( identicalTo ( $content ) ) );
+	}
+
+	/**
+	 * @test
 	 */
 	public function __toString_whenPathIsSet_returnsFilePath ( )
 	{
