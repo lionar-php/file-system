@@ -18,3 +18,16 @@ class FileTree
 		$this->storage->save ( $this->objects );
 	}
 }
+
+/**
+ * 1. Pick a root directory
+ * 2. Check wether file modification time is same as what we have stored for last modification
+ */
+
+$fileTree = new LocalFileTree ( __DIR__ );
+$fileTree->blacklist ( 'vendor' );
+
+
+foreach ( $directories as $directory )
+	if ( ! $directory->modificationTime === $storedModificationTime )
+		return $this->regenrate ( );

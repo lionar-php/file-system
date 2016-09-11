@@ -18,12 +18,12 @@
 	},
 	"autoload": {
     	"psr-4": {
-			"Lionar\\FileSystem\\": "source"
+			"FileSystem\\": "source"
     	}
   	},
 	"autoload-dev": {
 		"psr-4": {
-			"Lionar\\FileSystem\\Tests\\": "tests"
+			"FileSystem\\Tests\\": "tests"
 		}
 	},
 	"config": {

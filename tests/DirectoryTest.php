@@ -1,10 +1,10 @@
 <?php
 
-namespace Lionar\FileSystem\Tests;
+namespace FileSystem\Tests;
 
-use Lionar\FileSystem\Directory,
-	Lionar\Testing\TestCase,
-	Mockery;
+use FileSystem\Directory;
+use	Testing\TestCase;
+use	Mockery;
 
 class DirectoryTest extends TestCase
 {
@@ -18,7 +18,7 @@ class DirectoryTest extends TestCase
 	 */
 	public function add_withObject_addsObjectToDirectory ( )
 	{
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object' )->shouldIgnoreMissing ( );
+		$object = Mockery::mock ( 'FileSystem\\Object' )->shouldIgnoreMissing ( );
 		$directory = new Directory ( 'application' );
 		$directory->add ( $object );
 		assertThat ( $directory->objects, hasItemInArray ( $object ) );
@@ -30,7 +30,7 @@ class DirectoryTest extends TestCase
 	public function add_withObject_callsObjectMoveToMethod ( )
 	{
 		$directory = new Directory ( 'name' );
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object' );
+		$object = Mockery::mock ( 'FileSystem\\Object' );
 
 		$object->shouldReceive ( 'moveTo' )->once ( );
 		$directory->add ( $object );
@@ -42,7 +42,7 @@ class DirectoryTest extends TestCase
 	public function add_withObjectThatAlreadyHasDirectoryAsParent_doesNotCallObjectMoveToMethod ( )
 	{
 		$directory = new Directory ( 'name' );
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object[]', array ( 'object name', $directory ) );
+		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object name', $directory ) );
 		$object->shouldNotReceive ( 'moveTo' );
 		$directory->add ( $object );
 	}
@@ -57,7 +57,7 @@ class DirectoryTest extends TestCase
 	 */
 	public function has_whenDirectoryDoesNotHaveObject_returnsFalse ( )
 	{
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object', array ( 'name' ) );
+		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'name' ) );
 		$directory = new Directory ( 'application' );
 		assertThat( $directory->has ( $object ), is ( false ) );
 	}
@@ -68,7 +68,7 @@ class DirectoryTest extends TestCase
 	public function has_whenDirectoryDoesHaveObject_returnsTrue ( )
 	{
 		$directory = new Directory ( 'application' );
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object[]', array ( 'name', $directory ) )->shouldIgnoreMissing ( );
+		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $directory ) )->shouldIgnoreMissing ( );
 		assertThat( $directory->has ( $object ), is ( true ) );
 	}
 
@@ -84,7 +84,7 @@ class DirectoryTest extends TestCase
 	public function remove_withObjectThatExistsInDirectory_removesObjectFromDirectory ( )
 	{
 		$directory = new Directory ( 'application' );
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object[]', array ( 'name', $directory ) );
+		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $directory ) );
 		$directory->remove ( $object );
 		assertThat ( $directory->objects, noneOf ( contains ( $object ) ) );
 	}
@@ -95,7 +95,7 @@ class DirectoryTest extends TestCase
 	public function remove_withObjectThatExistsInDirectory_callsObjectRemoveFromMethod ( )
 	{
 		$directory = new Directory ( 'application' );
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object' )->shouldIgnoreMissing ( );
+		$object = Mockery::mock ( 'FileSystem\\Object' )->shouldIgnoreMissing ( );
 		$object->shouldReceive ( 'removeFromParent' )->once ( );
 		$directory->add ( $object );
 		$directory->remove ( $object );
@@ -114,7 +114,7 @@ class DirectoryTest extends TestCase
 	{
 		$newParent = new Directory ( 'root' );
 		$application = new Directory ( 'application' );
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object[]', array ( 'object' ) );
+		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object' ) );
 		$application->add ( $object );
 		$application->moveTo ( $newParent );
 		assertThat ( $object->path, is ( identicalTo ( 'root/application/object' ) ) );

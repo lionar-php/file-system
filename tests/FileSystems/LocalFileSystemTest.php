@@ -1,11 +1,11 @@
 <?php
 
-namespace Lionar\FileSystem\Tests\FileSystems;
+namespace FileSystem\Tests\FileSystems;
 
-use Lionar\FileSystem\FileSystems\LocalFileSystem,
-	Lionar\Testing\TestCase,
-	Mockery,
-	org\bovigo\vfs\vfsStream as VFS;
+use FileSystem\FileSystems\LocalFileSystem;
+use	Testing\TestCase;
+use	Mockery;
+use	org\bovigo\vfs\vfsStream as VFS;
 
 class LocalFileSystemTest extends TestCase
 {
@@ -15,7 +15,7 @@ class LocalFileSystemTest extends TestCase
     {
         $this->root = VFS::setup ( 'root' );
         VFS::newDirectory ( 'storage' )->at ( $this->root );
-		$fileTree = Mockery::mock ( 'Lionar\\FileSystem\\FileTree[]' )->shouldIgnoreMissing ( );
+		$fileTree = Mockery::mock ( 'FileSystem\\FileTree[]' )->shouldIgnoreMissing ( );
 		$this->fileSystem = new LocalFileSystem ( $fileTree );
     }
 
@@ -30,7 +30,7 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function make_withDirectoryThatDoesNotExistOnTheFileSystem_makesTheDirectory ( )
 	{
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( VFS::url ( 'root' ) . '/application' ) );
+		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( VFS::url ( 'root' ) . '/application' ) );
 		
 		$this->fileSystem->make ( $directory );
 		assertThat ( $this->root->hasChild ( 'application' ), is ( true ) );
@@ -41,8 +41,8 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function make_withDirectoryThatDoesNotExistOnTheFileSystemWithParentDirectory_makesTheDirectoryInsideParent ( )
 	{
-		$parent = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( VFS::url ( 'root' ) . '/application' ) )->shouldIgnoreMissing ( );
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory[]', array ( 'sports' ) )->shouldIgnoreMissing ( );
+		$parent = Mockery::mock ( 'FileSystem\\Directory', array ( VFS::url ( 'root' ) . '/application' ) )->shouldIgnoreMissing ( );
+		$directory = Mockery::mock ( 'FileSystem\\Directory[]', array ( 'sports' ) )->shouldIgnoreMissing ( );
 		
 		$this->fileSystem->make ( $parent );
 		$this->fileSystem->make ( $directory, $parent );
@@ -55,7 +55,7 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function make_withDirectoryThatDoesExistOnTheFileSystem_throwsException ( )
 	{
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( VFS::url ( 'root' ) . '/storage' ) );
+		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( VFS::url ( 'root' ) . '/storage' ) );
 		
 		$this->fileSystem->make ( $directory );
 	}
@@ -72,7 +72,7 @@ class LocalFileSystemTest extends TestCase
 	public function write_withContentsAndAFile_writesContentsToTheFileOnTheFileSystem ( )
 	{
 		$writtenContent = 'my new content that is awesome';
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File[]', array ( VFS::url ( 'root' ) . '/file.txt' ) );
+		$file = Mockery::mock ( 'FileSystem\\File[]', array ( VFS::url ( 'root' ) . '/file.txt' ) );
 
 		$this->fileSystem->write ( $writtenContent, $file );
 		assertThat ( file_get_contents ( VFS::url ( 'root/file.txt' ) ), is ( identicalTo ( $writtenContent ) ) );

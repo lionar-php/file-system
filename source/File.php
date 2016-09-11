@@ -1,6 +1,6 @@
 <?php
 
-namespace Lionar\FileSystem;
+namespace FileSystem;
 
 use InvalidArgumentException;
 

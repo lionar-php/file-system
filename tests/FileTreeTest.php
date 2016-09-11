@@ -1,10 +1,10 @@
 <?php
 
-namespace Lionar\FileSystem\Tests;
+namespace FileSystem\Tests;
 
-use Lionar\FileSystem\FileTree,
-	Lionar\Testing\TestCase,
-	Mockery;
+use FileSystem\FileTree;
+use	Testing\TestCase;
+use	Mockery;
 
 class FileTreeTest extends TestCase
 {
@@ -12,7 +12,7 @@ class FileTreeTest extends TestCase
 
 	public function setUp ( )
 	{
-		$this->root = Mockery::mock ( 'Lionar\\FileSystem\\Object', array ( 'root' ) );
+		$this->root = Mockery::mock ( 'FileSystem\\Object', array ( 'root' ) );
 		$this->fileTree = new FileTree ( array ( $this->root ) );
 	}
 
@@ -31,8 +31,8 @@ class FileTreeTest extends TestCase
 	 */
 	public function add_withObject_addsObjectToFileTreeObjectsUnderPathAsKey ( )
 	{
-		$parent = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( 'application' ) )->shouldIgnoreMissing ( );
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object', array ( 'dashboard.php', $parent ) );
+		$parent = Mockery::mock ( 'FileSystem\\Directory', array ( 'application' ) )->shouldIgnoreMissing ( );
+		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'dashboard.php', $parent ) );
 
 		$this->fileTree->add ( $object );
 		assertThat ( $this->fileTree->objects, hasEntry ( 'application/dashboard.php', $object ) );
@@ -61,7 +61,7 @@ class FileTreeTest extends TestCase
 	 */
 	public function has_withObjectPathThatDoesNotExists_returnsFalse ( )
 	{
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object', array ( 'nonExistent' ) );
+		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'nonExistent' ) );
 		$has = $this->fileTree->has ( $object );
 		assertThat ( $has, is ( false ) );
 	}
@@ -75,9 +75,9 @@ class FileTreeTest extends TestCase
 
 	public function initialFileTrees ( )
 	{
-		$object = Mockery::mock ( 'Lionar\\FileSystem\\Object', array ( 'object' ) );
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( 'directory' ) );
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File[]', array ( 'file' ) );
+		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'object' ) );
+		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) );
+		$file = Mockery::mock ( 'FileSystem\\File[]', array ( 'file' ) );
 
 		return array (
 			array ( array ( ), array ( ) ),

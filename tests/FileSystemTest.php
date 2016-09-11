@@ -1,9 +1,9 @@
 <?php
 
-namespace Lionar\FileSystem\Tests;
+namespace FileSystem\Tests;
 
-use Lionar\Testing\TestCase,
-	Mockery;
+use Testing\TestCase;
+use	Mockery;
 
 class FileSystemTest extends TestCase
 {
@@ -11,8 +11,8 @@ class FileSystemTest extends TestCase
 
 	public function setUp ( )
 	{
-		$this->fileTree = Mockery::mock ( 'Lionar\\FileSystem\\FileTree' )->shouldIgnoreMissing ( );
-		$this->fileSystem = Mockery::mock ( 'Lionar\\FileSystem\\FileSystem[]', array ( $this->fileTree ) );
+		$this->fileTree = Mockery::mock ( 'FileSystem\\FileTree' )->shouldIgnoreMissing ( );
+		$this->fileSystem = Mockery::mock ( 'FileSystem\\FileSystem[]', array ( $this->fileTree ) );
 	}
 
 	/*
@@ -26,7 +26,7 @@ class FileSystemTest extends TestCase
 	 */
 	public function make_withDirectory_callsFileTreeAddMethod ( )
 	{
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( 'application' ) );
+		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'application' ) );
 		$this->fileTree->shouldReceive ( 'add' )->once ( )->with ( $directory );		
 		$this->fileSystem->make ( $directory );
 	}
@@ -36,8 +36,8 @@ class FileSystemTest extends TestCase
 	 */
 	public function make_withDirectoryAndParentDirectory_addsParentToDirectory ( )
 	{
-		$parent = Mockery::mock ( 'Lionar\\FileSystem\\Directory' )->shouldIgnoreMissing ( );
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory[]', array ( 'application' ) )->shouldIgnoreMissing ( );
+		$parent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
+		$directory = Mockery::mock ( 'FileSystem\\Directory[]', array ( 'application' ) )->shouldIgnoreMissing ( );
 
 		$this->fileTree->shouldReceive ( 'has' )->with ( $directory )->andReturn ( false );
 		$this->fileTree->shouldReceive ( 'has' )->with ( $parent )->andReturn ( true );
@@ -52,7 +52,7 @@ class FileSystemTest extends TestCase
 	 */
 	public function make_withDirectoryThatDoesExistOnTheFileTree_throwsException ( )
 	{		
-		$directory = Mockery::mock ( 'Lionar\FileSystem\\Directory' );
+		$directory = Mockery::mock ( 'FileSystem\\Directory' );
 		$this->fileTree->shouldReceive ( 'has' )->andReturn ( true );
 		$this->fileSystem->make ( $directory );
 	}
@@ -63,9 +63,9 @@ class FileSystemTest extends TestCase
 	 */
 	public function make_withParentDirectoryThatDoesNotExistOnTheFileTree_throwsException ( )
 	{
-		$nonExistentParent = Mockery::mock ( 'Lionar\\FileSystem\\Directory' );
+		$nonExistentParent = Mockery::mock ( 'FileSystem\\Directory' );
 		$this->fileTree->shouldReceive ( 'has' )->with ( $nonExistentParent )->andReturn ( false );
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory' );
+		$directory = Mockery::mock ( 'FileSystem\\Directory' );
 		$this->fileSystem->make ( $directory, $nonExistentParent );
 	}
 
@@ -81,7 +81,7 @@ class FileSystemTest extends TestCase
 	public function write_withContentAndFile_setsContentOnFile ( )
 	{
 		$content = 'my content';
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File' );
+		$file = Mockery::mock ( 'FileSystem\\File' );
 		$file->shouldReceive ( 'write' )->with ( $content )->once ( );
 		$this->fileSystem->write ( $content, $file );
 	}
@@ -92,7 +92,7 @@ class FileSystemTest extends TestCase
 	public function write_withContentAndFile_addsFileToFileTree ( )
 	{
 		$content = 'my content';
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File' )->shouldIgnoreMissing ( );
+		$file = Mockery::mock ( 'FileSystem\\File' )->shouldIgnoreMissing ( );
 		$this->fileTree->shouldReceive ( 'add' )->with ( $file )->once ( );
 		$this->fileSystem->write ( $content, $file );
 	}
@@ -104,7 +104,7 @@ class FileSystemTest extends TestCase
 	public function write_withFileThatAlreadyExistsInFileTree_throwsException ( )
 	{
 		$content = 'my content';
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File' )->shouldIgnoreMissing ( );
+		$file = Mockery::mock ( 'FileSystem\\File' )->shouldIgnoreMissing ( );
 		$this->fileTree->shouldReceive ( 'has' )->with ( $file )->andReturn ( true );
 		$this->fileSystem->write ( $content, $file );
 	}
@@ -115,8 +115,8 @@ class FileSystemTest extends TestCase
 	public function write_withFileAndParentDirectory_addsParentToFile ( )
 	{
 		$content = 'my content';
-		$parent = Mockery::mock ( 'Lionar\\FileSystem\\Directory' )->shouldIgnoreMissing ( );
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File[]', array ( 'file.php' ) )->shouldIgnoreMissing ( );
+		$parent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
+		$file = Mockery::mock ( 'FileSystem\\File[]', array ( 'file.php' ) )->shouldIgnoreMissing ( );
 		$this->fileTree->shouldReceive ( 'has' )->with ( $parent )->andReturn ( true );
 		$this->fileSystem->write ( $content, $file, $parent );
 		assertThat ( $file->parent, is ( identicalTo ( $parent ) ) );
@@ -129,9 +129,9 @@ class FileSystemTest extends TestCase
 	public function write_withParentDirectoryThatDoesNotExistOnTheFileTree_throwsException ( )
 	{
 		$content = 'my content';
-		$nonExistentParent = Mockery::mock ( 'Lionar\\FileSystem\\Directory' );
+		$nonExistentParent = Mockery::mock ( 'FileSystem\\Directory' );
 		$this->fileTree->shouldReceive ( 'has' )->with ( $nonExistentParent )->andReturn ( false );
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File' )->shouldIgnoreMissing ( );
+		$file = Mockery::mock ( 'FileSystem\\File' )->shouldIgnoreMissing ( );
 		$this->fileSystem->write ( $content, $file, $nonExistentParent );
 	}
 
@@ -147,7 +147,7 @@ class FileSystemTest extends TestCase
 	 */
 	public function findFilesIn_withDirectory_returnsAllFilesIncludingNestedFilesFromDirectory ( array $objects, array $expectedFiles )
 	{
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory' );
+		$directory = Mockery::mock ( 'FileSystem\\Directory' );
 		$directory->objects = $objects;
 
 		$files = $this->fileSystem->findFilesIn ( $directory );
@@ -163,9 +163,9 @@ class FileSystemTest extends TestCase
 
 	public function objects ( )
 	{
-		$file = Mockery::mock ( 'Lionar\\FileSystem\\File[]', array ( 'file.txt' ) );
-		$directory = Mockery::mock ( 'Lionar\\FileSystem\\Directory', array ( 'application' ) )->shouldIgnoreMissing ( );
-		$nestedFile = Mockery::mock ( 'Lionar\\FileSystem\\File[]', array ( 'nested.txt', $directory ) );
+		$file = Mockery::mock ( 'FileSystem\\File[]', array ( 'file.txt' ) );
+		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'application' ) )->shouldIgnoreMissing ( );
+		$nestedFile = Mockery::mock ( 'FileSystem\\File[]', array ( 'nested.txt', $directory ) );
 		$directory->objects = array ( $nestedFile );
 
 		return array (

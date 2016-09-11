@@ -1,9 +1,9 @@
 <?php
 
-namespace Lionar\FileSystem\Tests;
+namespace FileSystem\Tests;
 
-use Lionar\FileSystem\File,
-	Lionar\Testing\TestCase;
+use FileSystem\File;
+use	Testing\TestCase;
 
 class FileTest extends TestCase
 {

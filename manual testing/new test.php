@@ -39,4 +39,4 @@ $fileSystem = new LocalFileSystem ( $fileTree );
 // $fileSystem->make ( $eyedouble, inside ( $themes ) );
 
 $eyeDashboard = new File ( 'dashboard.blade.php' );
-$fileSystem->write ( '<h1>Eyedouble rocks from the file system</h1>', to ( $eyeDashboard ), inside ( $eyedouble ) );
+$fileSystem->write ( '<h1>Eyedouble\'s template yeah!</h1>', to ( $eyeDashboard ), inside ( $eyedouble ) );

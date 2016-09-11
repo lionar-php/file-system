@@ -1,6 +1,6 @@
 <?php
 
-namespace Lionar\FileSystem;
+namespace FileSystem;
 
 class Directory extends Object
 {

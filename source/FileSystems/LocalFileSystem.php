@@ -1,13 +1,13 @@
 <?php
 
-namespace Lionar\FileSystem\FileSystems;
+namespace FileSystem\FileSystems;
 
-use InvalidArgumentException,
-	Lionar\FileSystem\Directory,
-	Lionar\FileSystem\File,
-	Lionar\FileSystem\FileSystem,
-	Lionar\FileSystem\FileTree,
-	Lionar\FileSystem\Object;
+use InvalidArgumentException;
+use FileSystem\Directory;
+use FileSystem\File;
+use FileSystem\FileSystem;
+use FileSystem\FileTree;
+use FileSystem\Object;
 
 class LocalFileSystem extends FileSystem
 {

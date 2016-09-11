@@ -1,1 +1,1 @@
-<h1>Eyedouble rocks from the file system</h1>
+<h1>Eyedouble's template yeah!</h1>
