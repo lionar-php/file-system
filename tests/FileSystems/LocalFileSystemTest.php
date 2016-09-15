@@ -38,19 +38,6 @@ class LocalFileSystemTest extends TestCase
 
 	/**
 	 * @test
-	 */
-	public function make_withDirectoryThatDoesNotExistOnTheFileSystemWithParentDirectory_makesTheDirectoryInsideParent ( )
-	{
-		$parent = Mockery::mock ( 'FileSystem\\Directory', array ( VFS::url ( 'root' ) . '/application' ) )->shouldIgnoreMissing ( );
-		$directory = Mockery::mock ( 'FileSystem\\Directory[]', array ( 'sports' ) )->shouldIgnoreMissing ( );
-		
-		$this->fileSystem->make ( $parent );
-		$this->fileSystem->make ( $directory, $parent );
-		assertThat ( file_exists ( VFS::url ( 'root' ) . '/application/sports' ), is ( true ) );
-	}
-
-	/**
-	 * @test
 	 * @expectedException InvalidArgumentException
 	 */
 	public function make_withDirectoryThatDoesExistOnTheFileSystem_throwsException ( )
@@ -73,8 +60,9 @@ class LocalFileSystemTest extends TestCase
 	{
 		$writtenContent = 'my new content that is awesome';
 		$file = Mockery::mock ( 'FileSystem\\File[]', array ( VFS::url ( 'root' ) . '/file.txt' ) );
+		$file->write ( $writtenContent );
 
-		$this->fileSystem->write ( $writtenContent, $file );
+		$this->fileSystem->write ( $file );
 		assertThat ( file_get_contents ( VFS::url ( 'root/file.txt' ) ), is ( identicalTo ( $writtenContent ) ) );
 	}
 }

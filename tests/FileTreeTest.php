@@ -29,22 +29,13 @@ class FileTreeTest extends TestCase
 	/**
 	 * @test
 	 */
-	public function add_withObject_addsObjectToFileTreeObjectsUnderPathAsKey ( )
+	public function add_withObject_addsObjectToFileTreeObjectsUnderObjectKeyAsKey ( )
 	{
 		$parent = Mockery::mock ( 'FileSystem\\Directory', array ( 'application' ) )->shouldIgnoreMissing ( );
 		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'dashboard.php', $parent ) );
 
 		$this->fileTree->add ( $object );
-		assertThat ( $this->fileTree->objects, hasEntry ( 'application/dashboard.php', $object ) );
-	}
-
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 */
-	public function add_withObjectPathThatAlreadyExists_throwsException ( )
-	{
-		$this->fileTree->add ( $this->root );
+		assertThat ( $this->fileTree->objects, hasEntry ( $object->key, $object ) );
 	}
 
 	/**
@@ -81,8 +72,8 @@ class FileTreeTest extends TestCase
 
 		return array (
 			array ( array ( ), array ( ) ),
-			array ( array ( $object ), array ( 'object' => $object ) ),
-			array ( array ( $directory, $file ), array ( 'directory' => $directory, 'file' => $file ) ),
+			array ( array ( $object ), array ( $object->key => $object ) ),
+			array ( array ( $directory, $file ), array ( $directory->key => $directory, $file->key => $file ) ),
 		);
 	}
 }

@@ -1,1 +1,1 @@
-<h1>Eyedouble's template yeah!</h1>
+<h1>Eyedouble template</h1>

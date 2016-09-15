@@ -1,9 +1,9 @@
 <?php
 
-use Lionar\FileSystem\Directory,
-	Lionar\FileSystem\File,
-	Lionar\FileSystem\FileTree,
-	Lionar\FileSystem\FileSystems\LocalFileSystem;
+use FileSystem\Directory,
+	FileSystem\File,
+	FileSystem\FileTree,
+	FileSystem\FileSystems\LocalFileSystem;
 
 function to ( File $file )
 {
@@ -31,12 +31,22 @@ foreach ( $objects as $object )
 	$fileTree->add ( $object );
 
 $fileSystem = new LocalFileSystem ( $fileTree );
+// $fileSystem->write ( 'hellooo', to ( new File ( 'dashboard.blade.php', $monastery ) ) );
 // $fileSystem->write ( "<h1>DASHBOARD FROM FILE SYSTEM LULLL</h1>", to ( $dashboard ) );
+
+
+
+// let the file system get the files itself
+// $files = $fileSystem->getFilesNamed ( 'dashboard.php' );
+
+// foreach ( $files as $file )
+// 	$fileSystem->append ( 'my content', to ( $file ) );
 
 
 
 
 // $fileSystem->make ( $eyedouble, inside ( $themes ) );
 
-$eyeDashboard = new File ( 'dashboard.blade.php' );
-$fileSystem->write ( '<h1>Eyedouble\'s template yeah!</h1>', to ( $eyeDashboard ), inside ( $eyedouble ) );
+$eyeDashboard = new File ( 'dashboard.blade.php', $eyedouble );
+$eyeDashboard->write ( '<h1>Eyedouble template</h1>' );
+$fileSystem->write ( $eyeDashboard );

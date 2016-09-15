@@ -13,30 +13,13 @@ abstract class FileSystem
 		$this->fileTree = $fileTree;
 	}
 
-	public function make ( Directory $directory, Directory $parent = null )
+	public function make ( Directory $directory )
 	{
-		$this->checkForAlreadyExistentObject ( $directory );
-					
-		if ( ! is_null ( $parent ) )
-		{
-			$this->checkForParent ( $parent );
-			$directory->moveTo ( $parent );
-		}
-
 		$this->fileTree->add ( $directory );
 	}
 
-	public function write ( $content, File $file, Directory $parent = null )
+	public function write ( File $file )
 	{
-		$this->checkForAlreadyExistentObject ( $file );
-
-		if ( ! is_null ( $parent ) )
-		{
-			$this->checkForParent ( $parent );
-			$file->moveTo ( $parent );
-		}
-
-		$file->write ( $content );
 		$this->fileTree->add ( $file );
 	}
 
@@ -53,17 +36,5 @@ abstract class FileSystem
 		}
 
 		return $files;
-	}
-
-	private function checkForParent ( Directory $parent )
-	{
-		if ( ! $this->fileTree->has ( $parent ) )
-			throw new InvalidArgumentException ( 'That parent directory does not exist' );
-	}
-
-	private function checkForAlreadyExistentObject ( Object $object )
-	{
-		if ( $this->fileTree->has ( $object ) )
-			throw new InvalidArgumentException ( 'That object already exists' );
 	}
 }

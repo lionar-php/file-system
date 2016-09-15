@@ -16,15 +16,12 @@ class FileTree
 
 	public function add ( Object $object )
 	{
-		if ( $this->has ( $object ) )
-			throw new InvalidArgumentException ( 'That object already exists in this file tree' );
-			
-		$this->objects [ $object->path ] = $object;
+		$this->objects [ $object->key ] = clone $object;
 	}
 
 	public function has ( Object $object )
 	{
-		return isset ( $this->objects [ $object->path ] );
+		return isset ( $this->objects [ $object->key ] );
 	}
 
 	public function __get ( $property )

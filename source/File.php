@@ -18,7 +18,7 @@ class File extends Object
 	public function write ( $content )
 	{
 		if ( ! is_string ( $content ) )
-			throw new InvalidArgumentException ( '' );
+			throw new InvalidArgumentException ( 'The content of a file must be a string' );
 		$this->content = $content;
 	}
 
