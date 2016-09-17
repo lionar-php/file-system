@@ -16,12 +16,15 @@ class FileTree
 
 	public function add ( Object $object )
 	{
-		$this->objects [ $object->key ] = clone $object;
+		if ( $this->has ( $object ) )
+			return;
+			
+		$this->objects [ $object->path ] = $object;
 	}
 
 	public function has ( Object $object )
 	{
-		return isset ( $this->objects [ $object->key ] );
+		return isset ( $this->objects [ $object->path ] );
 	}
 
 	public function __get ( $property )

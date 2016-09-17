@@ -13,13 +13,25 @@ abstract class FileSystem
 		$this->fileTree = $fileTree;
 	}
 
-	public function make ( Directory $directory )
-	{
+	public function make ( Directory $directory, Directory $parent = null )
+	{					
+		if ( ! is_null ( $parent ) )
+		{
+			$this->checkForParent ( $parent );
+			$directory->moveTo ( $parent );
+		}
+
 		$this->fileTree->add ( $directory );
 	}
 
-	public function write ( File $file )
+	public function write ( File $file, Directory $parent = null )
 	{
+		if ( ! is_null ( $parent ) )
+		{
+			$this->checkForParent ( $parent );
+			$file->moveTo ( $parent );
+		}
+
 		$this->fileTree->add ( $file );
 	}
 
@@ -36,5 +48,12 @@ abstract class FileSystem
 		}
 
 		return $files;
+	}
+
+	private function checkForParent ( Directory $parent )
+	{
+		if ( ! $this->fileTree->has ( $parent ) )
+			throw new InvalidArgumentException ( 
+				"The directory at path: $parent->path does not exist." );
 	}
 }

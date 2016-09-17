@@ -1,1 +1,1 @@
-<h1>Eyedouble template</h1>
+<h1>Awesome eyedouble</h1>

@@ -5,15 +5,10 @@ use FileSystem\Directory,
 	FileSystem\FileTree,
 	FileSystem\FileSystems\LocalFileSystem;
 
-function to ( File $file )
-{
-	return $file;
-}
+use function FileSystem\to;
+use function FileSystem\inside;
 
-function inside ( Directory $directory )
-{
-	return $directory;
-}
+
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -31,7 +26,10 @@ foreach ( $objects as $object )
 	$fileTree->add ( $object );
 
 $fileSystem = new LocalFileSystem ( $fileTree );
-// $fileSystem->write ( 'hellooo', to ( new File ( 'dashboard.blade.php', $monastery ) ) );
+
+$dashboard = new File ( 'dashboard.blade.php', $monastery );
+$dashboard->write ( 'new dashboard contents' );
+$fileSystem->write ( to ( $dashboard ) );
 // $fileSystem->write ( "<h1>DASHBOARD FROM FILE SYSTEM LULLL</h1>", to ( $dashboard ) );
 
 
@@ -47,6 +45,6 @@ $fileSystem = new LocalFileSystem ( $fileTree );
 
 // $fileSystem->make ( $eyedouble, inside ( $themes ) );
 
-$eyeDashboard = new File ( 'dashboard.blade.php', $eyedouble );
-$eyeDashboard->write ( '<h1>Eyedouble template</h1>' );
-$fileSystem->write ( $eyeDashboard );
+$eyeDashboard = new File ( 'dashboard.blade.php' );
+$eyeDashboard->write ( '<h1>Awesome eyedouble</h1>' );
+$fileSystem->write ( $eyeDashboard, inside ( $eyedouble ) );

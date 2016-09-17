@@ -16,18 +16,18 @@ class LocalFileSystem extends FileSystem
 		parent::__construct ( $fileTree );
 	}
 
-	public function make ( Directory $directory )
+	public function make ( Directory $directory, Directory $parent = null )
 	{
-		parent::make ( $directory );
+		parent::make ( $directory, $parent );
 		if ( file_exists ( $directory->path ) )
-			throw new InvalidArgumentException ( 'That directory already exists' );
+			return;
 			
 		mkdir ( $directory->path );
 	}
 
-	public function write ( File $file )
+	public function write ( File $file, Directory $parent = null )
 	{
-		parent::write ( $file );
+		parent::write ( $file, $parent );
 		file_put_contents ( $file->path, $file->content );
 	}
 }

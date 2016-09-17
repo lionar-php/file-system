@@ -6,7 +6,7 @@ use InvalidArgumentException;
 
 abstract class Object
 {
-	protected $name, $path, $key = '';
+	protected $name, $path = '';
 	protected $parent = null;
 
 	public function __construct ( $name, Directory $parent = null )
@@ -14,14 +14,20 @@ abstract class Object
 		if ( ! is_string ( $name ) or empty ( $name ) )
 			throw new InvalidArgumentException ( );
 		$this->name = $name;
-		$this->key = uniqid ( );
 
 		$this->addParent ( $parent );
 		$this->setFullPath ( );
 	}
 
+	public function __get ( $property )
+	{
+		if ( isset ( $this->{ $property } ) )
+			return $this->{ $property };
+	}
+
 	public function moveTo ( Directory $directory )
 	{
+		// $this->actions [ 'move' ] [ $this->path ] = array ( $this, $this->parent )
 		$this->removeFromParent ( );
 		$this->parent = $directory;
 		if ( ! $directory->has ( $this ) )
@@ -35,12 +41,6 @@ abstract class Object
 			$this->parent->remove ( $this );
 		$this->parent = null;
 		$this->setFullPath ( );
-	}
-
-	public function __get ( $property )
-	{
-		if ( isset ( $this->{ $property } ) )
-			return $this->{ $property };
 	}
 
 	private function addParent ( Directory $parent = null )
