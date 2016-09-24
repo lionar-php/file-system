@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lionar/support.git",
-                "reference": "516697f7b30d0cd87cf83a94573c7e5f99aa560c"
+                "reference": "79c7d9ed76da7c8958c8430e1ee14a4637f73fcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lionar/support/zipball/516697f7b30d0cd87cf83a94573c7e5f99aa560c",
-                "reference": "516697f7b30d0cd87cf83a94573c7e5f99aa560c",
+                "url": "https://api.github.com/repos/lionar/support/zipball/79c7d9ed76da7c8958c8430e1ee14a4637f73fcc",
+                "reference": "79c7d9ed76da7c8958c8430e1ee14a4637f73fcc",
                 "shasum": ""
             },
             "require-dev": {
@@ -30,7 +30,9 @@
                     "Support\\": "source"
                 },
                 "files": [
-                    "helpers.php"
+                    "helpers/arrays.php",
+                    "helpers/classes.php",
+                    "helpers/serialization.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -50,7 +52,7 @@
                 "lionar",
                 "support"
             ],
-            "time": "2016-09-24 16:10:46"
+            "time": "2016-09-24 16:54:25"
         }
     ],
     "packages-dev": [

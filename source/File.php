@@ -3,7 +3,7 @@
 namespace FileSystem;
 
 use InvalidArgumentException;
-use function Support\is_serialized;
+use function Support\Serialization\is_serialized;
 
 class File extends Object
 {
