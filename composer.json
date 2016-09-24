@@ -11,6 +11,7 @@
     	}
 	],
 	"require" : {
+		"lionar/support": "*",
 		"php": ">=5.5.9"
   	},
 	"require-dev": {

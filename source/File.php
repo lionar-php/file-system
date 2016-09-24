@@ -3,6 +3,7 @@
 namespace FileSystem;
 
 use InvalidArgumentException;
+use function Support\is_serialized;
 
 class File extends Object
 {
@@ -20,6 +21,13 @@ class File extends Object
 		if ( ! is_string ( $content ) )
 			throw new InvalidArgumentException ( 'The content of a file must be a string' );
 		$this->content = $content;
+	}
+
+	public function isEmpty ( ) : bool
+	{
+		if ( is_serialized ( $this->content ) )
+			return empty ( unserialize ( $this->content ) );
+		return empty ( $this->content );
 	}
 
 	public function __get ( $property )

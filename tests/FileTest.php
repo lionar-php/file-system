@@ -14,6 +14,12 @@ class FileTest extends TestCase
 		$this->file = new File ( 'file-name.php' );
 	}
 
+	/*
+	|--------------------------------------------------------------------------
+	| Construct method testing.
+	|--------------------------------------------------------------------------
+	*/
+
 	/**
 	 * @test
 	 */
@@ -32,6 +38,12 @@ class FileTest extends TestCase
 		$file = new File ( 'mock name', null, $content );
 		assertThat ( $file->content, is ( identicalTo ( $content ) ) );
 	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| To string method testing.
+	|--------------------------------------------------------------------------
+	*/
 
 	/**
 	 * @test
@@ -59,6 +71,48 @@ class FileTest extends TestCase
 	{
 		$this->file->write ( $content );
 		assertThat ( $this->file->content, is ( identicalTo ( $content ) ) );
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| is empty method testing.
+	|--------------------------------------------------------------------------
+	*/
+
+	/**
+	 * @test
+	 */
+	public function isEmpty_whenFileContentEqualsEmptyString_returnsTrue ( )
+	{
+		$this->file->write ( '' );
+		assertThat ( $this->file->isEmpty ( ), is ( identicalTo ( true ) ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function isEmpty_whenFileContentEqualsNonEmptyString_returnsFalse ( )
+	{
+		$this->file->write ( 'string' );
+		assertThat ( $this->file->isEmpty ( ), is ( identicalTo ( false ) ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function isEmpty_whenFileContentEqualsEmptySerializedString_returnsTrue ( )
+	{
+		$this->file->write ( serialize ( '' ) );
+		assertThat ( $this->file->isEmpty ( ), is ( identicalTo ( true ) ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function isEmpty_whenFileContentEqualsNonEmptySerializedString_returnsTrue ( )
+	{
+		$this->file->write ( serialize ( 'some string' ) );
+		assertThat ( $this->file->isEmpty ( ), is ( identicalTo ( false ) ) );
 	}
 
 	/*
