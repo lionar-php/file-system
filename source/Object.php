@@ -2,10 +2,13 @@
 
 namespace FileSystem;
 
+use Accessibility\Readable;
 use InvalidArgumentException;
 
 abstract class Object
 {
+	use Readable;
+	
 	protected $name, $path = '';
 	protected $parent = null;
 
@@ -17,12 +20,6 @@ abstract class Object
 
 		$this->addParent ( $parent );
 		$this->setFullPath ( );
-	}
-
-	public function __get ( $property )
-	{
-		if ( isset ( $this->{ $property } ) )
-			return $this->{ $property };
 	}
 
 	public function moveTo ( Directory $directory )

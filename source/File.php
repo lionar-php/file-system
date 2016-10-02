@@ -2,11 +2,14 @@
 
 namespace FileSystem;
 
+use Accessibility\Readable;
 use InvalidArgumentException;
 use function Support\Serialization\is_serialized;
 
 class File extends Object
 {
+	use Readable;
+
 	private $content, $extension = '';
 
 	public function __construct ( $name, Directory $parent = null, $content = '' )
@@ -28,12 +31,6 @@ class File extends Object
 		if ( is_serialized ( $this->content ) )
 			return empty ( unserialize ( $this->content ) );
 		return empty ( $this->content );
-	}
-
-	public function __get ( $property )
-	{
-		if ( isset ( $this-> { $property } ) )
-			return $this-> { $property };
 	}
 
 	public function __toString ( )

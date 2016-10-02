@@ -2,10 +2,13 @@
 
 namespace FileSystem;
 
+use Accessibility\Readable;
 use InvalidArgumentException;
 
 class FileTree
 {
+	use Readable;
+
 	private $objects = array ( );
 
 	public function __construct ( array $objects = array ( ) )
@@ -25,11 +28,5 @@ class FileTree
 	public function has ( Object $object )
 	{
 		return isset ( $this->objects [ $object->path ] );
-	}
-
-	public function __get ( $property )
-	{
-		if ( isset ( $this-> { $property } ) )
-			return $this-> { $property };
 	}
 }

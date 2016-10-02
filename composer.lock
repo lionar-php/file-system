@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lionar/support.git",
-                "reference": "79c7d9ed76da7c8958c8430e1ee14a4637f73fcc"
+                "reference": "afb6fe4bd43e2ce2245261cbe62a9dc70888bad9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lionar/support/zipball/79c7d9ed76da7c8958c8430e1ee14a4637f73fcc",
-                "reference": "79c7d9ed76da7c8958c8430e1ee14a4637f73fcc",
+                "url": "https://api.github.com/repos/lionar/support/zipball/afb6fe4bd43e2ce2245261cbe62a9dc70888bad9",
+                "reference": "afb6fe4bd43e2ce2245261cbe62a9dc70888bad9",
                 "shasum": ""
             },
             "require-dev": {
@@ -27,7 +27,9 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Support\\": "source"
+                    "Accessibility\\": "source/Accessibility",
+                    "Arrays\\": "source/Arrays",
+                    "Facades\\": "source/Facades"
                 },
                 "files": [
                     "helpers/arrays.php",
@@ -52,7 +54,7 @@
                 "lionar",
                 "support"
             ],
-            "time": "2016-09-24 16:54:25"
+            "time": "2016-10-01 14:48:29"
         }
     ],
     "packages-dev": [
@@ -164,12 +166,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lionar/testing.git",
-                "reference": "76e306e5379c08e685da54433c5fdbcb85b9fca5"
+                "reference": "06d982d3cc6599aab610924055eac44661e566ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lionar/testing/zipball/76e306e5379c08e685da54433c5fdbcb85b9fca5",
-                "reference": "76e306e5379c08e685da54433c5fdbcb85b9fca5",
+                "url": "https://api.github.com/repos/lionar/testing/zipball/06d982d3cc6599aab610924055eac44661e566ed",
+                "reference": "06d982d3cc6599aab610924055eac44661e566ed",
                 "shasum": ""
             },
             "require": {
@@ -199,7 +201,7 @@
                 "lionar",
                 "unit testing"
             ],
-            "time": "2016-09-24 13:38:02"
+            "time": "2016-09-26 22:24:17"
         },
         {
             "name": "mikey179/vfsStream",
@@ -410,16 +412,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "9270140b940ff02e58ec577c237274e92cd40cdd"
+                "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/9270140b940ff02e58ec577c237274e92cd40cdd",
-                "reference": "9270140b940ff02e58ec577c237274e92cd40cdd",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/8331b5efe816ae05461b7ca1e721c01b46bafb3e",
+                "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e",
                 "shasum": ""
             },
             "require": {
@@ -451,7 +453,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-06-10 09:48:41"
+            "time": "2016-09-30 07:12:33"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -506,12 +508,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "d3be8294e4729abcf8e6e207f25cdcb299cd1c88"
+                "reference": "5c324f4951aca87a2de61b7903b75126516b6386"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/d3be8294e4729abcf8e6e207f25cdcb299cd1c88",
-                "reference": "d3be8294e4729abcf8e6e207f25cdcb299cd1c88",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/5c324f4951aca87a2de61b7903b75126516b6386",
+                "reference": "5c324f4951aca87a2de61b7903b75126516b6386",
                 "shasum": ""
             },
             "require": {
@@ -522,7 +524,8 @@
                 "sebastian/recursion-context": "^1.0"
             },
             "require-dev": {
-                "phpspec/phpspec": "^2.0"
+                "phpspec/phpspec": "^2.0",
+                "phpunit/phpunit": "^4.8 || ^5"
             },
             "type": "library",
             "extra": {
@@ -560,7 +563,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2016-09-21 19:41:08"
+            "time": "2016-10-02 13:12:17"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -812,12 +815,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3d7e92beaed4518fc1c4f67091f0ebe23e1e0b40"
+                "reference": "376acc02748ad93ab2795630d7298b96313230b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3d7e92beaed4518fc1c4f67091f0ebe23e1e0b40",
-                "reference": "3d7e92beaed4518fc1c4f67091f0ebe23e1e0b40",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/376acc02748ad93ab2795630d7298b96313230b8",
+                "reference": "376acc02748ad93ab2795630d7298b96313230b8",
                 "shasum": ""
             },
             "require": {
@@ -886,7 +889,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-09-22 17:38:35"
+            "time": "2016-09-30 09:40:06"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1634,12 +1637,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "7fbb0dfc86370757774ff2d9bd5c3b89c9aac1a8"
+                "reference": "f3abbc0c63c0c7803db79a7398bb983e5b089f53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/7fbb0dfc86370757774ff2d9bd5c3b89c9aac1a8",
-                "reference": "7fbb0dfc86370757774ff2d9bd5c3b89c9aac1a8",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f3abbc0c63c0c7803db79a7398bb983e5b089f53",
+                "reference": "f3abbc0c63c0c7803db79a7398bb983e5b089f53",
                 "shasum": ""
             },
             "require": {
@@ -1681,7 +1684,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-20 08:33:13"
+            "time": "2016-09-28 14:20:56"
         },
         {
             "name": "webmozart/assert",
