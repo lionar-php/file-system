@@ -2,8 +2,9 @@
 
 namespace FileSystem\Tests;
 
-use Testing\TestCase;
+use FileSystem\FileSystem;
 use	Mockery;
+use Testing\TestCase;
 
 class FileSystemTest extends TestCase
 {
@@ -12,7 +13,7 @@ class FileSystemTest extends TestCase
 	public function setUp ( )
 	{
 		$this->fileTree = Mockery::mock ( 'FileSystem\\FileTree' )->shouldIgnoreMissing ( );
-		$this->fileSystem = Mockery::mock ( 'FileSystem\\FileSystem[]', array ( $this->fileTree ) );
+		$this->fileSystem = new FileSystem ( $this->fileTree );
 	}
 
 	/*
@@ -31,33 +32,6 @@ class FileSystemTest extends TestCase
 		$this->fileSystem->make ( $directory );
 	}
 
-	/**
-	 * @test 
-	 */
-	public function make_withDirectoryAndParentDirectory_addsParentToDirectory ( )
-	{
-		$parent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
-		$directory = Mockery::mock ( 'FileSystem\\Directory[]', array ( 'application' ) )->shouldIgnoreMissing ( );
-
-		$this->fileTree->shouldReceive ( 'has' )->with ( $directory )->andReturn ( false );
-		$this->fileTree->shouldReceive ( 'has' )->with ( $parent )->andReturn ( true );
-
-		$this->fileSystem->make ( $directory, $parent );
-		assertThat ( $directory->parent, is ( identicalTo ( $parent ) ) );	
-	}
-
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 */
-	public function make_withParentDirectoryThatDoesNotExistOnTheFileTree_throwsException ( )
-	{
-		$nonExistentParent = Mockery::mock ( 'FileSystem\\Directory' );
-		$this->fileTree->shouldReceive ( 'has' )->with ( $nonExistentParent )->andReturn ( false );
-		$directory = Mockery::mock ( 'FileSystem\\Directory' );
-		$this->fileSystem->make ( $directory, $nonExistentParent );
-	}
-
 	/*
 	|--------------------------------------------------------------------------
 	| Write
@@ -72,30 +46,6 @@ class FileSystemTest extends TestCase
 		$file = Mockery::mock ( 'FileSystem\\File' )->shouldIgnoreMissing ( );
 		$this->fileTree->shouldReceive ( 'add' )->with ( $file )->once ( );
 		$this->fileSystem->write ( $file );
-	}
-	
-	/**
-	 * @test
-	 */
-	public function write_withFileAndParentDirectory_addsParentToFile ( )
-	{
-		$parent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
-		$file = Mockery::mock ( 'FileSystem\\File[]', array ( 'file.php' ) )->shouldIgnoreMissing ( );
-		$this->fileTree->shouldReceive ( 'has' )->with ( $parent )->andReturn ( true );
-		$this->fileSystem->write ( $file, $parent );
-		assertThat ( $file->parent, is ( identicalTo ( $parent ) ) );
-	}
-
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 */
-	public function write_withParentDirectoryThatDoesNotExistOnTheFileTree_throwsException ( )
-	{
-		$nonExistentParent = Mockery::mock ( 'FileSystem\\Directory' );
-		$this->fileTree->shouldReceive ( 'has' )->with ( $nonExistentParent )->andReturn ( false );
-		$file = Mockery::mock ( 'FileSystem\\File' )->shouldIgnoreMissing ( );
-		$this->fileSystem->write ( $file, $nonExistentParent );
 	}
 
 	/*

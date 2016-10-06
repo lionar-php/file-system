@@ -39,6 +39,19 @@ abstract class Object
 		$this->setFullPath ( );
 	}
 
+	public function isIn ( Directory $directory ) : bool
+	{
+		if ( $this->isDirectlyIn ( $directory ) )
+			return true;
+		if ( $this->hasLevelUp ( $this->parent ) )
+			return $this->parent->isIn ( $directory );
+	}
+
+	public function isDirectlyIn ( Directory $directory ) : bool
+	{
+		return ( $directory === $this->parent );
+	}
+
 	private function addParent ( Directory $parent = null )
 	{
 		if ( ! is_null ( $parent ) )

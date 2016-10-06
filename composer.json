@@ -1,6 +1,6 @@
 {
 	"name": "lionar/file-system",
-	"description": "A very readable file system API",
+	"description": "A very readable file system API.",
 	"keywords": [ "Lionar", "Component", "File system" ],
 	"license": "MIT",
 	"authors": [
@@ -11,15 +11,15 @@
     	}
 	],
 	"require" : {
-		"lionar/support": "*",
+		"lionar/support"					: "*",
 		"php": ">=5.5.9"
   	},
 	"require-dev": {
-		"lionar/testing": "*"
+		"lionar/testing"					: "*"
 	},
 	"autoload": {
     	"psr-4": {
-			"FileSystem\\": "source"
+			"FileSystem\\"					: "source"
     	},
     	"files": [
     		"helpers.php"
@@ -27,7 +27,10 @@
   	},
 	"autoload-dev": {
 		"psr-4": {
-			"FileSystem\\Tests\\": "tests"
+			"FileSystem\\Disks\\Tests\\"	: "tests/Disks",
+			"FileSystem\\Drivers\\Tests\\" 	: "tests/Drivers",
+			"FileSystem\\Rules\\Tests\\"	: "tests/Rules",
+			"FileSystem\\Tests\\"			: "tests"
 		}
 	},
 	"config": {

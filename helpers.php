@@ -16,3 +16,8 @@ function inside ( Directory $directory )
 {
 	return $directory;
 }
+
+function at ( $location )
+{
+	return $location;
+}

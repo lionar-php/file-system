@@ -7,10 +7,19 @@ use	Mockery;
 
 class ObjectTest extends TestCase
 {
+	private $object, $parent, $grandParent, $randomDirectory = null;
+
+	public function setUp ( )
+	{
+		$this->grandParent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
+		$this->parent = Mockery::mock ( 'FileSystem\\Directory', array ( 'parent', $this->grandParent ) )->shouldIgnoreMissing ( );
+		$this->randomDirectory = Mockery::mock ( 'FileSystem\\Directory' );
+		$this->object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $this->parent ) );
+	}
 
 	/*
 	|--------------------------------------------------------------------------
-	| Constructor
+	| Constructor.
 	|--------------------------------------------------------------------------
 	*/
 
@@ -76,7 +85,7 @@ class ObjectTest extends TestCase
 
 	/*
 	|--------------------------------------------------------------------------
-	| Remove from parent
+	| Remove from parent.
 	|--------------------------------------------------------------------------
 	*/
 
@@ -119,7 +128,7 @@ class ObjectTest extends TestCase
 
 	/*
 	|--------------------------------------------------------------------------
-	| Move to
+	| Move to.
 	|--------------------------------------------------------------------------
 	*/
 
@@ -198,7 +207,51 @@ class ObjectTest extends TestCase
 
 	/*
 	|--------------------------------------------------------------------------
-	| Data providers
+	| Is directly in.
+	|--------------------------------------------------------------------------
+	*/
+
+	/**
+	 * @test
+	 */
+	public function isDirectlyIn_withDirectoryThatIsNotTheObjectParent_returnsFalse ( )
+	{
+		assertThat ( $this->object->isDirectlyIn ( $this->grandParent ), is ( identicalTo ( false ) ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function isDirectlyIn_withDirectoryThatIsTheObjectParent_returnsTrue ( )
+	{	
+		assertThat ( $this->object->isDirectlyIn ( $this->parent ), is ( identicalTo ( true ) ) );
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Is in.
+	|--------------------------------------------------------------------------
+	*/
+
+	/**
+	 * @test
+	 */
+	public function isIn_withDirectoryThatObjectIsNotInside_returnsFalse ( )
+	{
+		assertThat ( $this->object->isIn ( $this->randomDirectory ), is ( identicalTo ( false ) ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function isIn_withDirectoryThatObjectIsInside_returnsTrue ( )
+	{
+		assertThat ( $this->object->isIn ( $this->parent ), is ( identicalTo ( true ) ) );
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Data providers.
 	|--------------------------------------------------------------------------
 	*/
 
