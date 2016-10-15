@@ -3,83 +3,91 @@
 namespace FileSystem;
 
 use Accessibility\Readable;
+use FileSystem\Exceptions\InvalidObjectName;
 use InvalidArgumentException;
 
 abstract class Object
 {
 	use Readable;
-	
-	protected $name, $path = '';
+
+	protected $name, $path, $oldName = '';
 	protected $parent = null;
 
-	public function __construct ( $name, Directory $parent = null )
+	public function __construct ( $name, Directory $parent )
 	{
-		if ( ! is_string ( $name ) or empty ( $name ) )
-			throw new InvalidArgumentException ( );
-		$this->name = $name;
-
-		$this->addParent ( $parent );
-		$this->setFullPath ( );
+		$this->named ( $name );
+		$this->parentedBy ( $parent );
+		$this->setPath ( );
 	}
 
 	public function moveTo ( Directory $directory )
 	{
-		$this->removeFromParent ( );
+		$this->parent->remove ( $this );
 		$this->parent = $directory;
-		if ( ! $directory->has ( $this ) )
-			$directory->add ( $this );
-		$this->setFullPath ( );
-	}
-
-	public function removeFromParent ( )
-	{
-		if ( ! is_null ( $this->parent ) )
-			$this->parent->remove ( $this );
-		$this->parent = null;
-		$this->setFullPath ( );
-	}
-
-	public function isIn ( Directory $directory ) : bool
-	{
-		if ( $this->isDirectlyIn ( $directory ) )
-			return true;
-		if ( $this->hasLevelUp ( $this->parent ) )
-			return $this->parent->isIn ( $directory );
+		$this->setPath ( );
+		$directory->add ( $this );
 	}
 
 	public function isDirectlyIn ( Directory $directory ) : bool
 	{
-		return ( $directory === $this->parent );
+		return  ( bool ) ( $directory === $this->parent );
 	}
 
-	private function addParent ( Directory $parent = null )
+	public function isIn ( Directory $directory ) : bool
 	{
-		if ( ! is_null ( $parent ) )
-			$parent->add ( $this );
-		$this->parent = $parent;
+		if ( $directory->isRoot )
+			return true;
+		if ( $this->isDirectlyIn ( $directory ) )
+			return true;
+		if ( $this->hasLevelUp ( $this->parent ) )
+			return $this->parent->isIn ( $directory );
+		return false;
 	}
 
-	protected function setFullPath ( )
+	public function renameTo ( $name )
+	{
+		$this->oldName = $this->name;
+		$this->named ( $name );
+	}
+
+	protected function setPath ( )
 	{
 		$this->path = $this->name;
-		if ( $this->parent !== null )
-			$this->itterateParents ( $this->parent );
-	}
-
-	private function hasLevelUp ( Directory $directory )
-	{
-		return ( isset ( $directory->parent ) and ! empty ( $directory->parent ) );
+		$this->itterateParents ( $this->parent );
+		$this->path = '/' . $this->path;
 	}
 
 	private function itterateParents( Directory $directory )
 	{
-			$this->prependDirectoryName ( $directory->name );
-			if ( $this->hasLevelUp ( $directory ) )
-				return $this->itterateParents ( $directory->parent );
+		if ( ! $this->hasLevelUp ( $directory ) )
+			return;
+
+		$this->prependDirectoryName ( $directory->name );
+		return $this->itterateParents ( $directory->parent );
+	}
+
+	private function hasLevelUp ( Directory $directory )
+	{
+		return ( bool ) ( $directory->name !== 'root://' );
 	}
 
 	private function prependDirectoryName ( $name )
 	{
 		$this->path = $name . '/' . $this->path;
+	}
+
+	private function named ( $name )
+	{
+		if ( ! is_string ( $name ) or empty ( $name ) )
+			throw new InvalidArgumentException ( '$name must be a non empty string.' );
+		if ( strpos ( $name, '/' ) !== false )
+			throw new InvalidObjectName ( $name );
+		$this->name = $name;
+	}
+
+	private function parentedBy ( Directory $parent )
+	{
+		$this->parent = $parent;
+		$parent->add ( $this );
 	}
 }

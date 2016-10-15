@@ -1,283 +1,214 @@
 <?php
 
-namespace FileSystem;
+namespace FileSystem\Tests;
 
+use Mockery;
 use Testing\TestCase;
-use	Mockery;
 
 class ObjectTest extends TestCase
 {
-	private $object, $parent, $grandParent, $randomDirectory = null;
+	private $object, $parent, $newParent = null;
 
 	public function setUp ( )
 	{
-		$this->grandParent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
-		$this->parent = Mockery::mock ( 'FileSystem\\Directory', array ( 'parent', $this->grandParent ) )->shouldIgnoreMissing ( );
-		$this->randomDirectory = Mockery::mock ( 'FileSystem\\Directory' );
-		$this->object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $this->parent ) );
+		$root = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' );
+		$root->name = 'root://';
+		$root->isRoot = true;
+
+		$parent = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' )->shouldIgnoreMissing ( );
+		$parent->name = 'application';
+		$parent->parent = $root;
+		$parent->isRoot = false;
+
+		$newParent = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' )->shouldIgnoreMissing ( );
+		$newParent->name = 'themes';
+		$newParent->parent = $root;
+		$newParent->isRoot = false;
+
+		$this->root = $root;
+		$this->parent = $parent;
+		$this->newParent = $newParent;
+		$this->object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $parent ) );
 	}
 
 	/*
 	|--------------------------------------------------------------------------
-	| Constructor.
+	| Constructor parent add calling.
 	|--------------------------------------------------------------------------
-	*/
-
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 * @dataProvider nonStringValues
-	 */
-	public function __construct_withNonStringValueForName_throwsException ( $value )
-	{
-		Mockery::mock ( 'FileSystem\\Object', array ( $value ) );
-	}
-
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException	
-	 */
-	public function __construct_withEmptyStringForName_throwsException ( )
-	{
-		Mockery::mock ( 'FileSystem\\Object', array ( '' ) );
-	}
-
-	/**
-	 * @test
-	 * @dataProvider objectNames
-	 */
-	public function __construct_withStringForName_setsNameOnObject ( $name )
-	{
-		$object = Mockery::mock ( 'FileSystem\\Object', array ( $name ) );
-		assertThat ( $object->name, is ( identicalTo ( $name ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function __construct_withDirectoryForParent_setsDirectoryAsParent ( )
-	{
-		$parent = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) );
-		$parent->shouldReceive ( 'add' );
-		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'mock name', $parent ) );
-		assertThat ( $object->parent, is ( identicalTo ( $parent ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function __construct_withDirectoryForParent_addsItselfToTheParent ( )
-	{
-		$parent = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) )->shouldIgnoreMissing ( );
-		$parent->shouldReceive ( 'add' )->once ( )->with ( 
-			Mockery::mock ( 'FileSystem\\Object', array ( 'mock name', $parent ) )
-		);
-	}
-
-	/**
-	 * @test
-	 * @dataProvider structures
-	 */
-	public function __construct_whenStructureIsSetOut_setsPathOnObject ( $object, $expectedPath )
-	{
-		assertThat ( $object->path, is ( identicalTo ( $expectedPath ) ) );
-	}
-
-	/*
-	|--------------------------------------------------------------------------
-	| Remove from parent.
-	|--------------------------------------------------------------------------
+	|
+	| On construction the parent add method must be called.
+	| We test if this is the case here.
 	*/
 
 	/**
 	 * @test
 	 */
-	public function removeFromParent_whenParentIsset_removesParentFromObject ( )
+	public function __construct_withDirectoryForParent_callsParentAddMethod ( )
 	{
-		$parent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
+		$parent = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' );
+		$parent->shouldReceive ( 'add' )->once ( );
+		$parent->name = 'root://';
 		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $parent ) );
-		$object->removeFromParent ( );
-		assertThat ( $object->parent, is ( identicalTo ( null ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function removeFromParent_whenParentIsset_callsParentRemoveMethod ( )
-	{
-		$parent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $parent ) );
-		$parent->shouldReceive ( 'remove' )->once ( )->with ( $object );
-		
-		$object->removeFromParent ( );
-	}
-
-	/**
-	 * @test
-	 */
-	public function removeFromParent_whenParentIsset_modifiesObjectPath ( )
-	{
-		$name = 'name';
-		$parent = Mockery::mock ( 'FileSystem\\Directory' )->shouldIgnoreMissing ( );
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( $name, $parent ) );
-		$parent->shouldReceive ( 'remove' )->once ( )->with ( $object );
-		
-		$object->removeFromParent ( );
-		assertThat ( $object->path, is ( identicalTo ( $name ) ) );
 	}
 
 	/*
 	|--------------------------------------------------------------------------
-	| Move to.
+	| Constructor path testing.
 	|--------------------------------------------------------------------------
+	|
+	| On construction we will need to set the path on our 
+	| object. Here we test if that path is set correctly.
 	*/
 
 	/**
 	 * @test
 	 */
-	public function moveTo_whenObjectHasCurrentlyGotAParent_callsCurrentParentRemoveMethod ( )
+	public function __construct_withNameAndParentDirectory_setsPathOnObject ( )
 	{
-		$currentParent = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) )->shouldIgnoreMissing ( );
-		
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object', $currentParent ) );
-		$currentParent->shouldReceive ( 'remove' )->once ( )->with ( $object );
-		
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) )->shouldIgnoreMissing ( );
-		$object->moveTo ( $directory );
-	}
-
-	/**
-	 * @test
-	 */
-	public function moveTo_whenObjectHasNoCurrentParent_doesNotCallCurrentParentRemoveMethod ( )
-	{		
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object' ) );
-		
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) )->shouldIgnoreMissing ( );
-		$object->moveTo ( $directory );
-	}
-
-	/**
-	 * @test
-	 */
-	public function moveTo_withDirectory_setsDirectoryAsParent ( )
-	{
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) )->shouldIgnoreMissing ( );
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object' ) );
-		$object->moveTo ( $directory );
-		assertThat ( $object->parent, is ( identicalTo ( $directory ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function moveTo_withDirectoryWhenFileDoesNotExistInDirectory_callsDirectoryAddMethod ( )
-	{
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object' ) );
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) );
-		$directory->shouldReceive ( 'has' )->once ( )->andReturn ( false );
-		$directory->shouldReceive ( 'add' )->once ( )->with ( $object );
-		$object->moveTo ( $directory );
-	}
-
-	/**
-	 * @test
-	 */
-	public function moveTo_withDirectoryWhenFileDoesNotExistInDirectory_ModifiesObjectPath ( )
-	{
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object' ) );
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) );
-		$directory->shouldReceive ( 'has' )->once ( )->andReturn ( false );
-		$directory->shouldReceive ( 'add' )->once ( )->with ( $object );
-		$object->moveTo ( $directory );
-		assertThat ( $object->path, is ( identicalTo ( 'directory/object' ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function moveTo_withDirectoryWhenFileDoesAlreadyExistInDirectory_doesNotcallDirectoryAddMethod ( )
-	{
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) )->shouldIgnoreMissing ( );
-		$directory->shouldReceive ( 'has' )->once ( )->andReturn ( true );
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object', $directory ) );
-		$directory->shouldNotReceive ( 'add' );
-		$object->moveTo ( $directory );
+		assertThat ( $this->object->path, is ( identicalTo ( '/application/name' ) ) );
 	}
 
 	/*
 	|--------------------------------------------------------------------------
 	| Is directly in.
 	|--------------------------------------------------------------------------
+	|
+	| This method checks if a given directory is the parent 
+	| of that object. 
 	*/
 
 	/**
 	 * @test
 	 */
-	public function isDirectlyIn_withDirectoryThatIsNotTheObjectParent_returnsFalse ( )
+	public function isDirectlyInWithDirectoryThatIsNotTheObjectParent_returnsFalse ( )
 	{
-		assertThat ( $this->object->isDirectlyIn ( $this->grandParent ), is ( identicalTo ( false ) ) );
+		$directory = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' );
+		assertThat ( $this->object->isDirectlyIn ( $directory ), is ( identicalTo ( false ) ) );
 	}
 
 	/**
 	 * @test
 	 */
-	public function isDirectlyIn_withDirectoryThatIsTheObjectParent_returnsTrue ( )
-	{	
+	public function isDirectlyInWithDirectoryThatIsTheObjectParent_returnsTrue ( )
+	{
 		assertThat ( $this->object->isDirectlyIn ( $this->parent ), is ( identicalTo ( true ) ) );
 	}
 
 	/*
 	|--------------------------------------------------------------------------
-	| Is in.
+	| Is directly in.
 	|--------------------------------------------------------------------------
+	|
+	| This method checks if the object is inside the given 
+	| directory. It does this check recursively till the root.
 	*/
 
 	/**
 	 * @test
 	 */
-	public function isIn_withDirectoryThatObjectIsNotInside_returnsFalse ( )
+	public function isIn_withDirectoryThatObjectIsNotIn_returnsFalse ( )
 	{
-		assertThat ( $this->object->isIn ( $this->randomDirectory ), is ( identicalTo ( false ) ) );
+		$this->parent->shouldReceive ( 'isIn' )->andReturn ( false );
+		assertThat ( $this->object->isIn ( $this->newParent ), is ( identicalTo ( false ) ) );
 	}
 
 	/**
 	 * @test
 	 */
-	public function isIn_withDirectoryThatObjectIsInside_returnsTrue ( )
+	public function isIn_withDirectoryThatObjectIsIn_returnsTrue ( )
 	{
+		$directory = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' )->shouldIgnoreMissing ( );
+		$directory->parent = $this->parent;
+		$directory->shouldReceive ( 'isIn' )->andReturn ( true );
+
+		$this->object->moveTo ( $directory );
+
 		assertThat ( $this->object->isIn ( $this->parent ), is ( identicalTo ( true ) ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function isIn_withRootDirectory_returnsTrue ( )
+	{
+		assertThat ( $this->object->isIn ( $this->root ), is ( identicalTo ( true ) ) );
 	}
 
 	/*
 	|--------------------------------------------------------------------------
-	| Data providers.
+	| Move to.
 	|--------------------------------------------------------------------------
+	|
+	| Move to allows this object to move to another directory.
+	| Here we will test all the correct parent directory methods 
+	| are called and that the object path is modified to the new
+	| directory.
 	*/
 
-	public function objectNames ( )
+	/**
+	 * @test
+	 */
+	public function moveTo_withDirectory_setsDirectoryAsParentOnObject ( )
 	{
-		return array (
-
-			array ( 'application' ),
-			array ( 'dashboard.php' )
-		);
+		$this->object->moveTo ( $this->newParent );
+		assertThat ( $this->object->parent, is ( identicalTo ( $this->newParent ) ) );
 	}
 
-	public function structures ( )
+	/**
+	 * @test
+	 */
+	public function moveTo_withDirectory_modifiesPath ( )
 	{
-		$root = Mockery::mock ( 'FileSystem\\Directory', array ( 'root' ) );
-		$root->shouldReceive ( 'add' );
-		$application = Mockery::mock ( 'FileSystem\\Directory', array ( 'application', $root ) );
-		$application->shouldReceive ( 'add' );
+		$this->object->moveTo ( $this->newParent );
+		assertThat ( $this->object->path, is ( identicalTo ( '/themes/name' ) ) );
+	}
 
+	/**
+	 * @test
+	 */
+	public function moveTo_withDirectory_callsOldParentRemoveMethod ( )
+	{
+		$this->parent->shouldReceive ( 'remove' )->with ( $this->object )->once ( );
+		$this->object->moveTo ( $this->newParent );
+	}
 
+	/**
+	 * @test
+	 */
+	public function moveTo_withDirectory_callsNewParentAddMethod ( )
+	{
+		$this->newParent->shouldReceive ( 'add' )->with ( $this->object )->once ( );
+		$this->object->moveTo ( $this->newParent );
+	}
 
-		return array (
+	/*
+	|--------------------------------------------------------------------------
+	| Rename to.
+	|--------------------------------------------------------------------------
+	|
+	| Rename to allows for renaming file system objects. 
+	| Here we test if the new name is set correctly. Also
+	| we check that the old name of the object is stored
+	| temporarily.
+	*/
 
-			array ( Mockery::mock ( 'FileSystem\\Object', array ( 'dashboard.php', $root ) ), 'root/dashboard.php' ),
-			array ( Mockery::mock ( 'FileSystem\\Object', array ( 'filename.php', $application ) ), 'root/application/filename.php' ),
-			array ( Mockery::mock ( 'FileSystem\\Object', array ( 'other-file.txt', $application ) ), 'root/application/other-file.txt' ),			
-		);
-	}  
+	/**
+	 * @test
+	 */
+	public function renameTo_withStringForName_setsNameOnObject ( )
+	{
+		$name = 'hello.php';
+		$this->object->renameTo ( $name );
+		assertThat ( $this->object->name, is ( identicalTo ( $name ) ) );
+	}
+
+	/**
+	 * @test
+	 */
+	public function renameTo_withStringForName_setsFormerNameAsOldNamenObject ( )
+	{
+		$oldName = $this->object->name;
+		$this->object->renameTo ( 'new name' );
+		assertThat ( $this->object->oldName, is ( identicalTo ( $oldName ) ) );
+	}
 }

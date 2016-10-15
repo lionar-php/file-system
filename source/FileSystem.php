@@ -6,21 +6,30 @@ use FileSystem\Exceptions\ObjectNotFoundException;
 
 class FileSystem
 {
-	private $fileTree = null;
+	private $fileTree, $manager = null;
 
-	public function __construct ( FileTree $fileTree )
+	public function __construct ( FileTree $fileTree, Manager $manager )
 	{
 		$this->fileTree = $fileTree;
+		$this->manager = $manager;
 	}
 
-	public function make ( Directory $directory )
+	public function make ( Directory $directory, Directory $parent = null )
 	{					
+		if ( ! is_null ( $parent ) )
+			$parent->add ( $directory );
+
 		$this->fileTree->add ( $directory );
+		$this->manager->make ( $directory );
 	}
 
-	public function write ( File $file )
+	public function write ( File $file, Directory $parent = null )
 	{
+		if ( ! is_null ( $parent ) )
+			$parent->add ( $file );
+		
 		$this->fileTree->add ( $file );
+		$this->manager->write ( $file );
 	}
 
 	public function findFilesIn ( Directory $directory )

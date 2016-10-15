@@ -22,6 +22,7 @@ class DiskTest extends TestCase
 	| Constructor.
 	|--------------------------------------------------------------------------
 	*/
+
 	/**
 	 * @test
 	 * @expectedException InvalidArgumentException

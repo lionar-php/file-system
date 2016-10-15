@@ -7,10 +7,12 @@
  */
 namespace FileSystem;
 
+
 class Space extends Directory
 {
 	
 }
+
 
 $application->bind ( 'FileSystem\\Space', function ( User $user )
 {
@@ -20,13 +22,14 @@ $application->bind ( 'FileSystem\\Space', function ( User $user )
 
 // In your business logic:
 
-use FileSystem\Directory;
+use FileSystem\File;
 use FileSystem\FileSystem;
 use FileSystem\Space;
 
 
 when ( 'i want to make a directory inside my space', 
-	then( apply ( a ( function ( FileSystem $fileSystem, Directory $directory, Space $space )
+
+then( apply ( a ( function ( FileSystem $fileSystem, Space $space, File $file )
 {
-	$fileSystem->make ( $directory, inside ( $space ) );
+	$fileSystem->write ( $file, inside ( $space ) );
 } ) ) ) );

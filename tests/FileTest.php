@@ -3,7 +3,8 @@
 namespace FileSystem\Tests;
 
 use FileSystem\File;
-use	Testing\TestCase;
+use Mockery;
+use Testing\TestCase;
 
 class FileTest extends TestCase
 {
@@ -11,7 +12,9 @@ class FileTest extends TestCase
 
 	public function setUp ( )
 	{
-		$this->file = new File ( 'file-name.php' );
+		$this->root = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' )->shouldIgnoreMissing ( );
+		$this->root->name = 'root://';
+		$this->file = new File ( 'file-name.php', $this->root );
 	}
 
 	/*
@@ -25,8 +28,7 @@ class FileTest extends TestCase
 	 */
 	public function __construct_withNameWithExtension_setsExtensionOnFile ( )
 	{
-		$file = new File ( 'dashboard.php' );
-		assertThat ( $file->extension, is ( identicalTo ( 'php' ) ) );
+		assertThat ( $this->file->extension, is ( identicalTo ( 'php' ) ) );
 	}
 
 	/**
@@ -35,7 +37,7 @@ class FileTest extends TestCase
 	 */
 	public function __construct_withContent_setsContentOnFileObject ( $content )
 	{
-		$file = new File ( 'mock name', null, $content );
+		$file = new File ( 'mock name', $this->root, $content );
 		assertThat ( $file->content, is ( identicalTo ( $content ) ) );
 	}
 
@@ -50,7 +52,7 @@ class FileTest extends TestCase
 	 */
 	public function __toString_whenPathIsSet_returnsFilePath ( )
 	{
-		assertThat( ( string ) $this->file, is ( identicalTo ( 'file-name.php' ) ) );
+		assertThat( ( string ) $this->file, is ( identicalTo ( '/file-name.php' ) ) );
 	}
 
 	/**

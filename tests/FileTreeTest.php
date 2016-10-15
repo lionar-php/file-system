@@ -3,8 +3,8 @@
 namespace FileSystem\Tests;
 
 use FileSystem\FileTree;
-use	Testing\TestCase;
-use	Mockery;
+use Testing\TestCase;
+use Mockery;
 
 class FileTreeTest extends TestCase
 {
@@ -12,18 +12,8 @@ class FileTreeTest extends TestCase
 
 	public function setUp ( )
 	{
-		$this->root = Mockery::mock ( 'FileSystem\\Object', array ( 'root' ) );
+		$this->root = Mockery::mock ( 'FileSystem\\Root' )->shouldIgnoreMissing ( );
 		$this->fileTree = new FileTree ( array ( $this->root ) );
-	}
-
-	/**
-	 * @test
-	 * @dataProvider initialFileTrees
-	 */
-	public function __construct_withArrayForFileObjects_setsInitalFileObjectsOnFileTree ( $objects, $expected )
-	{
-		$fileTree = new FileTree ( $objects );
-		assertThat ( $fileTree->objects, is ( identicalTo ( $expected ) ) );
 	}
 
 	/**
@@ -31,11 +21,11 @@ class FileTreeTest extends TestCase
 	 */
 	public function add_withObject_addsObjectToFileTreeObjectsUnderPathAsKey ( )
 	{
-		$parent = Mockery::mock ( 'FileSystem\\Directory', array ( 'application' ) )->shouldIgnoreMissing ( );
+		$parent = Mockery::mock ( 'FileSystem\\Directory', array ( 'application', $this->root ) )->shouldIgnoreMissing ( );
 		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'dashboard.php', $parent ) );
 
 		$this->fileTree->add ( $object );
-		assertThat ( $this->fileTree->objects, hasEntry ( 'application/dashboard.php', $object ) );
+		assertThat ( $this->fileTree->objects, hasEntry ( '/application/dashboard.php', $object ) );
 	}
 
 	/**
@@ -52,28 +42,8 @@ class FileTreeTest extends TestCase
 	 */
 	public function has_withObjectPathThatDoesNotExists_returnsFalse ( )
 	{
-		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'nonExistent' ) );
+		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'nonExistent', $this->root ) );
 		$has = $this->fileTree->has ( $object );
 		assertThat ( $has, is ( false ) );
-	}
-
-
-	/*
-	|--------------------------------------------------------------------------
-	| Data providers
-	|--------------------------------------------------------------------------
-	*/
-
-	public function initialFileTrees ( )
-	{
-		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'object' ) );
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'directory' ) );
-		$file = Mockery::mock ( 'FileSystem\\File[]', array ( 'file' ) );
-
-		return array (
-			array ( array ( ), array ( ) ),
-			array ( array ( $object ), array ( 'object' => $object ) ),
-			array ( array ( $directory, $file ), array ( 'directory' => $directory, 'file' => $file ) ),
-		);
 	}
 }

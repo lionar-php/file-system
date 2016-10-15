@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d78f8174e2180a819c46dafdc780fbfb",
+    "hash": "3c083033988427f0379269a56a7dfde3",
     "content-hash": "28d91b69a48b0801119ed9e15081909c",
     "packages": [
         {
@@ -255,12 +255,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "82af09a8ba58fd4a94a3f2dd52e8d8d7cff890e2"
+                "reference": "15dc926d6f805edbcd58d0c422590de5fd5533c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/82af09a8ba58fd4a94a3f2dd52e8d8d7cff890e2",
-                "reference": "82af09a8ba58fd4a94a3f2dd52e8d8d7cff890e2",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/15dc926d6f805edbcd58d0c422590de5fd5533c4",
+                "reference": "15dc926d6f805edbcd58d0c422590de5fd5533c4",
                 "shasum": ""
             },
             "require": {
@@ -312,7 +312,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2016-10-04 08:20:51"
+            "time": "2016-10-10 09:47:30"
         },
         {
             "name": "myclabs/deep-copy",
@@ -815,12 +815,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "19481ae129eda8d87073ae808ce1063b766045f6"
+                "reference": "4b90637a2befba321b8cc87f707e65946d0fdbc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/19481ae129eda8d87073ae808ce1063b766045f6",
-                "reference": "19481ae129eda8d87073ae808ce1063b766045f6",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4b90637a2befba321b8cc87f707e65946d0fdbc4",
+                "reference": "4b90637a2befba321b8cc87f707e65946d0fdbc4",
                 "shasum": ""
             },
             "require": {
@@ -889,20 +889,20 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-10-03 13:06:13"
+            "time": "2016-10-09 13:28:49"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.3.1",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "03500345483e1e17b52e2e4d34a89c9408ab2902"
+                "reference": "238d7a2723bce689c79eeac9c7d5e1d623bb9dc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/03500345483e1e17b52e2e4d34a89c9408ab2902",
-                "reference": "03500345483e1e17b52e2e4d34a89c9408ab2902",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/238d7a2723bce689c79eeac9c7d5e1d623bb9dc2",
+                "reference": "238d7a2723bce689c79eeac9c7d5e1d623bb9dc2",
                 "shasum": ""
             },
             "require": {
@@ -948,7 +948,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-10-04 11:03:26"
+            "time": "2016-10-09 07:01:45"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1692,12 +1692,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "8444f2ac9f86342665cdae47b6d3ea6e07794456"
+                "reference": "1a6cc8d09dd675802ca93de290ac483c10ef95e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/8444f2ac9f86342665cdae47b6d3ea6e07794456",
-                "reference": "8444f2ac9f86342665cdae47b6d3ea6e07794456",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/1a6cc8d09dd675802ca93de290ac483c10ef95e0",
+                "reference": "1a6cc8d09dd675802ca93de290ac483c10ef95e0",
                 "shasum": ""
             },
             "require": {
@@ -1734,7 +1734,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-08-18 09:30:53"
+            "time": "2016-10-10 07:45:47"
         }
     ],
     "aliases": [],

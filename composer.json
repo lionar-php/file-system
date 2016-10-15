@@ -8,29 +8,29 @@
 			"name": "Aron Wouters",
 			"email": "lionar@mail.com",
 			"role": "Developer"
-    	}
+    		}
 	],
 	"require" : {
-		"lionar/support"					: "*",
+		"lionar/support"			: "*",
 		"php": ">=5.5.9"
   	},
 	"require-dev": {
-		"lionar/testing"					: "*"
+		"lionar/testing"				: "*"
 	},
 	"autoload": {
-    	"psr-4": {
-			"FileSystem\\"					: "source"
-    	},
-    	"files": [
-    		"helpers.php"
-    	]
+	    	"psr-4": {
+			"FileSystem\\"			: "source"
+	    	},
+	    	"files": [
+	    		"helpers.php"
+	    	]
   	},
 	"autoload-dev": {
 		"psr-4": {
 			"FileSystem\\Disks\\Tests\\"	: "tests/Disks",
 			"FileSystem\\Drivers\\Tests\\" 	: "tests/Drivers",
 			"FileSystem\\Rules\\Tests\\"	: "tests/Rules",
-			"FileSystem\\Tests\\"			: "tests"
+			"FileSystem\\Tests\\"		: "tests"
 		}
 	},
 	"config": {

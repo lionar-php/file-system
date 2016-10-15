@@ -1,122 +1,120 @@
 <?php
 
-namespace FileSystem\Tests;
+namespace FileSystem;
 
-use FileSystem\Directory;
-use	Testing\TestCase;
-use	Mockery;
+use Mockery;
+use Testing\TestCase;
 
 class DirectoryTest extends TestCase
 {
+	private $directory, $root = null;
+
+	public function setUp ( )
+	{
+		$root = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' )->shouldIgnoreMissing ( );
+		$root->name = 'root://';
+
+		$this->root = $root;
+		$this->directory = new Directory ( 'application', $root );
+	}
+
 	/*
 	|--------------------------------------------------------------------------
-	| Add
+	| Add.
 	|--------------------------------------------------------------------------
+	|
+	| Add allows to add an object to the directory. Here we test
+	| that the object is added to the directory and that the correct
+	| object methods are called.
 	*/
+
 	/**
 	 * @test
 	 */
-	public function add_withObject_addsObjectToDirectory ( )
+	public function add_withObject_addsObjectToDirectoryObjects ( )
 	{
-		$object = Mockery::mock ( 'FileSystem\\Object' )->shouldIgnoreMissing ( );
-		$directory = new Directory ( 'application' );
-		$directory->add ( $object );
-		assertThat ( $directory->objects, hasItemInArray ( $object ) );
+		$object = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Object' )->shouldIgnoreMissing ( );
+		$object->name = $name = 'name';
+		$this->directory->add ( $object );
+		assertThat ( $this->directory->objects, hasKeyValuePair ( $name, $object ) );
 	}
 
 	/**
 	 * @test
 	 */
-	public function add_withObject_callsObjectMoveToMethod ( )
+	public function add_withObjectWhenDirectoryIsNotObjectsParent_callsObjectMoveToMethod ( )
 	{
-		$directory = new Directory ( 'name' );
 		$object = Mockery::mock ( 'FileSystem\\Object' );
-
-		$object->shouldReceive ( 'moveTo' )->once ( );
-		$directory->add ( $object );
+		$object->shouldReceive ( 'isDirectlyIn' )->andReturn ( false );
+		$object->shouldReceive ( 'moveTo' )->with ( $this->directory )->once ( );
+		$this->directory->add ( $object );
 	}
 
 	/**
 	 * @test
 	 */
-	public function add_withObjectThatAlreadyHasDirectoryAsParent_doesNotCallObjectMoveToMethod ( )
+	public function add_withObjectWhenDirectoryIsObjectsParent_doesNotcallObjectMoveToMethod ( )
 	{
-		$directory = new Directory ( 'name' );
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object name', $directory ) );
-		$object->shouldNotReceive ( 'moveTo' );
-		$directory->add ( $object );
-	}
-
-	/*
-	|--------------------------------------------------------------------------
-	| Has
-	|--------------------------------------------------------------------------
-	*/
-	/**
-	 * @test
-	 */
-	public function has_whenDirectoryDoesNotHaveObject_returnsFalse ( )
-	{
-		$object = Mockery::mock ( 'FileSystem\\Object', array ( 'name' ) );
-		$directory = new Directory ( 'application' );
-		assertThat( $directory->has ( $object ), is ( false ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function has_whenDirectoryDoesHaveObject_returnsTrue ( )
-	{
-		$directory = new Directory ( 'application' );
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $directory ) )->shouldIgnoreMissing ( );
-		assertThat( $directory->has ( $object ), is ( true ) );
+		$object = Mockery::mock ( 'FileSystem\\Object' );
+		$object->shouldReceive ( 'isDirectlyIn' )->andReturn ( true );
+		$object->shouldNotReceive ( 'moveTo' )->with ( $this->directory );
+		$this->directory->add ( $object );
 	}
 
 	/*
 	|--------------------------------------------------------------------------
-	| Remove
+	| Remove.
 	|--------------------------------------------------------------------------
+	|
+	| Testing that objects are removed from the directory
+	| objects array and that that correct object methods 
+	| are called.
 	*/
 
 	/**
 	 * @test
+	 * @expectedException FileSystem\Exceptions\ObjectNotFoundException
 	 */
-	public function remove_withObjectThatExistsInDirectory_removesObjectFromDirectory ( )
+	public function remove_withObjectThatIsNotInDirectory_throwsException ( )
 	{
-		$directory = new Directory ( 'application' );
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $directory ) );
-		$directory->remove ( $object );
-		assertThat ( $directory->objects, noneOf ( contains ( $object ) ) );
-	}
-
-	/**
-	 * @test
-	 */
-	public function remove_withObjectThatExistsInDirectory_callsObjectRemoveFromMethod ( )
-	{
-		$directory = new Directory ( 'application' );
 		$object = Mockery::mock ( 'FileSystem\\Object' )->shouldIgnoreMissing ( );
-		$object->shouldReceive ( 'removeFromParent' )->once ( );
-		$directory->add ( $object );
-		$directory->remove ( $object );
+		$this->directory->remove ( $object );
+	}
+
+	/**
+	 * @test
+	 */
+	public function remove_withObject_removesObjectFromDirectory ( )
+	{
+		$object = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Object' )->shouldIgnoreMissing ( );
+		$object->name = 'object';
+
+		$this->directory->add ( $object );
+		$this->directory->remove ( $object );
+
+		assertThat ( $this->directory->objects, noneOf ( hasKey ( $object->name ), hasItem ( $object ) ) );
 	}
 
 	/*
 	|--------------------------------------------------------------------------
-	| Move to
+	| Move to.
 	|--------------------------------------------------------------------------
+	|
+	| Testing that move to also moves all the objects inside the directory.
 	*/
 
 	/**
 	 * @test
 	 */
-	public function moveTo_withDirectoryForNewParent_alsoModifiesDirectoryObjectPath ( )
+	public function moveTo_withDirectoryForNewParent_callsObjectMoveToMethod ( )
 	{
-		$newParent = new Directory ( 'root' );
-		$application = new Directory ( 'application' );
-		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'object' ) );
+		$newParent = new Directory ( 'subdir', $this->root );
+		$application = $this->directory;
+
+		$object = Mockery::mock ( 'FileSystem\\Object' )->shouldIgnoreMissing ( );
 		$application->add ( $object );
+		$object->shouldReceive ( 'moveTo' )->with ( $application )->once ( );
+
 		$application->moveTo ( $newParent );
-		assertThat ( $object->path, is ( identicalTo ( 'root/application/object' ) ) );
 	}
 }

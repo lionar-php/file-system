@@ -2,11 +2,13 @@
 
 namespace FileSystem\Disks;
 
+use ArrayIterator;
 use FileSystem\Disk;
 use FileSystem\Exceptions\DiskAlreadyExistsException;
 use FileSystem\Exceptions\DiskNotFoundException;
+use IteratorAggregate;
 
-class Manager
+class Manager implements IteratorAggregate
 {
 	private $disks = array ( );
 
@@ -27,5 +29,10 @@ class Manager
 	public function has ( $name ) : bool
 	{
 		return ( bool ) ( array_key_exists ( $name, $this->disks ) );
+	}
+
+	public function getIterator ( ) : ArrayIterator
+	{
+		return new ArrayIterator ( $this->disks );
 	}
 }

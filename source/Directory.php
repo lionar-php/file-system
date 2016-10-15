@@ -2,15 +2,33 @@
 
 namespace FileSystem;
 
+use Accessibility\Readable;
+use FileSystem\Exceptions\ObjectNotFoundException;
+
 class Directory extends Object
 {
+	use Readable;
+
 	private $objects = array ( );
 
 	public function add ( Object $object )
 	{
-		$this->objects [ ] = $object;
-		if ( ! $object->parent == $this )
+		$this->objects [ $object->name ] = $object;
+		if ( ! $object->isDirectlyIn ( $this ) )
 			$object->moveTo ( $this );
+	}
+
+	public function remove ( Object $object )
+	{
+		if (  ! $this->has ( $object ) )
+			throw new ObjectNotFoundException ( $object );
+		
+		unset ( $this->objects [ $object->name ] );
+	}
+
+	public function has ( Object $object )
+	{
+		return ( bool ) ( isset ( $this->objects [ $object->name ] ) );
 	}
 
 	public function moveTo ( Directory $directory )
@@ -18,27 +36,5 @@ class Directory extends Object
 		parent::moveTo ( $directory );
 		foreach ( $this->objects as $object )
 			$object->moveTo ( $this );
-	}
-
-	public function has ( Object $object )
-	{
-		return in_array ( $object, $this->objects );
-	}
-
-	public function remove ( Object $object )
-	{
-		if ( ! $this->has ( $object ) )
-			return;
-
-		$key = array_search ( $object, $this->objects );
-		$object = $this->objects [ $key ];
-		unset ( $this->objects [ $key ] );
-		$object->removeFromParent ( );
-	}
-
-	public function __get ( $property )
-	{
-		if ( isset ( $this-> { $property } ) )
-			return $this-> { $property };
 	}
 }

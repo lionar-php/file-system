@@ -3,33 +3,34 @@
 namespace FileSystem\Drivers\Tests;
 
 use FileSystem\Drivers\LocalFileSystem;
-use	Mockery;
-use	org\bovigo\vfs\vfsStream as VFS;
+use Mockery;
+use org\bovigo\vfs\vfsStream as VFS;
 use Testing\TestCase;
 
 class LocalFileSystemTest extends TestCase
 {
 	private $root, $fileSystem = null;
 
-    public function setUp()
-    {
-        $this->root = VFS::setup ( 'root' );
-        VFS::newDirectory ( 'storage' )->at ( $this->root );
+    	public function setUp()
+    	{
+        		$this->root = VFS::setup ( 'root' );
+        		VFS::newDirectory ( 'storage' )->at ( $this->root );
 		$this->fileSystem = new LocalFileSystem;
-    }
+		$this->rootObject = Mockery::mock ( 'FileSystem\\Root' )->shouldIgnoreMissing ( );
+    	}
 
-    /*
-    |--------------------------------------------------------------------------
-    | Making a directory.
-    |--------------------------------------------------------------------------
-    */
+    	/*
+    	|--------------------------------------------------------------------------
+    	| Making a directory.
+    	|--------------------------------------------------------------------------
+    	*/
 
 	/**
 	 * @test
 	 */
 	public function make_withDirectoryThatDoesNotExistOnTheFileSystem_makesTheDirectory ( )
 	{
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'application' ) );
+		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'application', $this->rootObject ) );
 		
 		$this->fileSystem->make ( $directory, VFS::url ( 'root' ) );
 		assertThat ( $this->root->hasChild ( 'application' ), is ( true ) );
@@ -40,12 +41,12 @@ class LocalFileSystemTest extends TestCase
 	 */
 	public function make_withDirectoryThatDoesExistOnTheFileSystem_doesNotThrowExceptionOrError ( )
 	{
-		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'storage' ) );
+		$directory = Mockery::mock ( 'FileSystem\\Directory', array ( 'storage', $this->rootObject ) );
 		
 		$this->fileSystem->make ( $directory, VFS::url ( 'root' ) );
 	}
 
-    /*
+    	/*
 	|--------------------------------------------------------------------------
 	| Writing to a file.
 	|--------------------------------------------------------------------------
@@ -57,7 +58,7 @@ class LocalFileSystemTest extends TestCase
 	public function write_withContentsAndAFile_writesContentsToTheFileOnTheFileSystem ( )
 	{
 		$writtenContent = 'my new content that is awesome';
-		$file = Mockery::mock ( 'FileSystem\\File[]', array ( 'file.txt' ) );
+		$file = Mockery::mock ( 'FileSystem\\File[]', array ( 'file.txt', $this->rootObject ) );
 		$file->content = $writtenContent;
 
 		$this->fileSystem->write ( $file, VFS::url ( 'root' ) );
