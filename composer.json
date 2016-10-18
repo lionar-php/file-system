@@ -8,7 +8,7 @@
 			"name": "Aron Wouters",
 			"email": "lionar@mail.com",
 			"role": "Developer"
-    		}
+		}
 	],
 	"require" : {
 		"lionar/support"			: "*",
@@ -19,7 +19,7 @@
 	},
 	"autoload": {
 	    	"psr-4": {
-			"FileSystem\\"			: "source"
+				"FileSystem\\"			: "source"
 	    	},
 	    	"files": [
 	    		"helpers.php"
@@ -30,7 +30,7 @@
 			"FileSystem\\Disks\\Tests\\"	: "tests/Disks",
 			"FileSystem\\Drivers\\Tests\\" 	: "tests/Drivers",
 			"FileSystem\\Rules\\Tests\\"	: "tests/Rules",
-			"FileSystem\\Tests\\"		: "tests"
+			"FileSystem\\Tests\\"			: "tests"
 		}
 	},
 	"config": {

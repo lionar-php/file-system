@@ -61,14 +61,4 @@ $store->write ( 'my awesome stored content' );
 $fileSystem->write ( $store );
 
 
-/**
- * 
- * If the directory does not exist:
- *
- * - Automatically create it *
- * - Throw exception
- *
- *
- * The system should not fail when an object is created inside a non existing path,
- * it should auto create that path.
- */
+dump ( $fileSystem->findFilesIn ( $application ) );

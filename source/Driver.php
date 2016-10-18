@@ -14,6 +14,6 @@ abstract class Driver
 	{
 		if ( ! is_string ( $location ) )
 			throw new InvalidArgumentException ( '$location must be a string.' );
-		return rtrim ( $location, '/' ) . '/';
+		return rtrim ( $location, '/' );
 	}
 }
