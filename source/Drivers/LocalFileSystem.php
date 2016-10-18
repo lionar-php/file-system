@@ -11,7 +11,7 @@ class LocalFileSystem extends Driver
 {
 	public function write ( File $file, $location )
 	{
-		$this->permissionCheck ( $location );
+		$this->permissionCheck ( $location . $file->parent->path );
 		$location = $this->correctify ( $location );
 		file_put_contents ( $location . $file->path, $file->content );
 	}
@@ -22,7 +22,7 @@ class LocalFileSystem extends Driver
 		if ( is_dir ( $location . $directory->path ) )
 			return;
 
-		$this->permissionCheck ( $location );
+		$this->permissionCheck ( $location . $directory->parent->path );
 		mkdir ( $location . $directory->path );
 	}
 
