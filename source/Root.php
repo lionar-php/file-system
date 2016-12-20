@@ -4,11 +4,11 @@ namespace FileSystem;
 
 class Root extends Directory
 {
-	protected $name = 'root://';
+	protected $name = '';
 	protected $parent = null;
 
-	public function __construct ( )
+	public function __construct ( $name )
 	{
-		
+		$this->name = $name;
 	}
 }

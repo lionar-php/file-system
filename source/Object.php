@@ -35,7 +35,7 @@ abstract class Object
 
 	public function isIn ( Directory $directory ) : bool
 	{
-		if ( $directory->isRoot )
+		if ( $directory instanceOf Root )
 			return true;
 		if ( $this->isDirectlyIn ( $directory ) )
 			return true;
@@ -68,7 +68,7 @@ abstract class Object
 
 	private function hasLevelUp ( Directory $directory )
 	{
-		return ( bool ) ( $directory->name !== 'root://' );
+		return ( bool ) ! ( $directory instanceOf Root );
 	}
 
 	private function prependDirectoryName ( $name )
@@ -76,7 +76,7 @@ abstract class Object
 		$this->path = $name . '/' . $this->path;
 	}
 
-	private function named ( $name )
+	protected function named ( $name )
 	{
 		if ( ! is_string ( $name ) or empty ( $name ) )
 			throw new InvalidArgumentException ( '$name must be a non empty string.' );

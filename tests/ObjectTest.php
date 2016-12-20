@@ -11,9 +11,9 @@ class ObjectTest extends TestCase
 
 	public function setUp ( )
 	{
-		$root = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' );
-		$root->name = 'root://';
-		$root->isRoot = true;
+		$root = Mockery::mock ( 'FileSystem\\Root' );
+		// $root->name = 'root://';
+		// $root->isRoot = true;
 
 		$parent = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' )->shouldIgnoreMissing ( );
 		$parent->name = 'application';
@@ -45,9 +45,8 @@ class ObjectTest extends TestCase
 	 */
 	public function __construct_withDirectoryForParent_callsParentAddMethod ( )
 	{
-		$parent = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' );
+		$parent = Mockery::mock ( 'FileSystem\\Root' );
 		$parent->shouldReceive ( 'add' )->once ( );
-		$parent->name = 'root://';
 		$object = Mockery::mock ( 'FileSystem\\Object[]', array ( 'name', $parent ) );
 	}
 

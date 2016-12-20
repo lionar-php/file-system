@@ -1,5 +1,11 @@
 <?php
 
+use FileSystem\Root;
+use FileSystem\Directory;
+use FileSystem\File;
+
+require __DIR__ . '/../vendor/autoload.php';
+
 /*
 |--------------------------------------------------------------------------
 | Removing an object.
@@ -7,7 +13,7 @@
 |
 | Removing an object from it's parent directory resolves in
 | an invalid object since it has no longer a parent. We should
-| be able to unset all be we cannot.
+| be able to unset all but we cannot.
 */
 
 $root = new Root;
@@ -15,6 +21,8 @@ $application = new Directory ( 'application', $root );
 $dashboard = new File ( 'dashboard.php', $application );
 
 $application->remove ( $dashboard );
+
+dd ( $dashboard );
 
 
 /** 

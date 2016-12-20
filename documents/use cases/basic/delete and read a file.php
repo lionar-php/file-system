@@ -17,7 +17,7 @@ when ( 'i want to delete a file', then( apply ( a ( function ( FileSystem $fileS
 |--------------------------------------------------------------------------
 |
 | After you call delete with $file on the file system it goes
-| through the delete process of the file system, it is being 
+| through the delete process of the file system, it is 
 | removed from the file tree and it is removed from the 
 | parent inside the file tree. 
 |

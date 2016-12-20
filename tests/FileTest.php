@@ -12,8 +12,7 @@ class FileTest extends TestCase
 
 	public function setUp ( )
 	{
-		$this->root = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' )->shouldIgnoreMissing ( );
-		$this->root->name = 'root://';
+		$this->root = Mockery::mock ( 'FileSystem\\Root' )->shouldIgnoreMissing ( );
 		$this->file = new File ( 'file-name.php', $this->root );
 	}
 

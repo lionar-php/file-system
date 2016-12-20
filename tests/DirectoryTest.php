@@ -11,8 +11,7 @@ class DirectoryTest extends TestCase
 
 	public function setUp ( )
 	{
-		$root = Mockery::mock ( 'FileSystem\\Tests\\Assets\\Directory' )->shouldIgnoreMissing ( );
-		$root->name = 'root://';
+		$root = Mockery::mock ( 'FileSystem\\Root' )->shouldIgnoreMissing ( );
 
 		$this->root = $root;
 		$this->directory = new Directory ( 'application', $root );
