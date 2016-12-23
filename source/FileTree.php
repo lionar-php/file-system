@@ -3,9 +3,10 @@
 namespace FileSystem;
 
 use Accessibility\Readable;
+use ArrayAccess;
 use InvalidArgumentException;
 
-class FileTree
+class FileTree implements ArrayAccess
 {
 	use Readable;
 
@@ -29,4 +30,25 @@ class FileTree
 	{
 		return isset ( $this->objects [ $object->path ] );
 	}
+
+	public function offsetSet ( $NA, $object ) 
+	{
+		$this->add ( $object );
+    }
+
+    public function offsetExists ( $path ) 
+    {
+    	return isset ( $this->objects [ $path ] );
+    }
+
+    public function offsetUnset ( $path ) 
+    {
+        
+    }
+
+    public function offsetGet ( $path ) 
+    {
+        if ( isset ( $this->objects [ $path ] ) )
+        	return $this->objects [ $path ];
+    }
 }
