@@ -1,5 +1,8 @@
 # TODO
 
+- Create from array in object factory. 
+
+- Create symfony file tree generator / cache
 - Implement rule system
 - Think about whether to auto create or throw exception on writing to parents that don't exist
 - Conflict management

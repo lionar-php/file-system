@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "73e2d318c575a3490f2643527ade1638",
-    "content-hash": "28d91b69a48b0801119ed9e15081909c",
+    "hash": "67fe2005e492b2c0d68d45400777f87a",
+    "content-hash": "594c2b01f0105f5c491b9f4067aadea7",
     "packages": [
         {
             "name": "lionar/support",
@@ -54,6 +54,55 @@
                 "support"
             ],
             "time": "2016-10-18 13:46:44"
+        },
+        {
+            "name": "symfony/finder",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/finder.git",
+                "reference": "941debb585000c27e9ca92e70a65620d7a4d4502"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/941debb585000c27e9ca92e70a65620d7a4d4502",
+                "reference": "941debb585000c27e9ca92e70a65620d7a4d4502",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Finder\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Finder Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-12-13 09:39:51"
         }
     ],
     "packages-dev": [
@@ -254,12 +303,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "0f183fa38026cf47794c978d6277d7b1cd08cd5f"
+                "reference": "89f77081d6eba6274b290c3fcc09f58be94d3a8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/0f183fa38026cf47794c978d6277d7b1cd08cd5f",
-                "reference": "0f183fa38026cf47794c978d6277d7b1cd08cd5f",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/89f77081d6eba6274b290c3fcc09f58be94d3a8a",
+                "reference": "89f77081d6eba6274b290c3fcc09f58be94d3a8a",
                 "shasum": ""
             },
             "require": {
@@ -311,7 +360,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2016-12-20 12:15:22"
+            "time": "2016-12-20 13:50:22"
         },
         {
             "name": "myclabs/deep-copy",
@@ -680,12 +729,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "cd1414369602eee0b1b59b400177dc7ec9b26ff5"
+                "reference": "363e14f0171a4fd7eeea36f19104cd9aa2e7de3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/cd1414369602eee0b1b59b400177dc7ec9b26ff5",
-                "reference": "cd1414369602eee0b1b59b400177dc7ec9b26ff5",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/363e14f0171a4fd7eeea36f19104cd9aa2e7de3e",
+                "reference": "363e14f0171a4fd7eeea36f19104cd9aa2e7de3e",
                 "shasum": ""
             },
             "require": {
@@ -734,7 +783,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-05 07:01:37"
+            "time": "2016-12-20 15:23:52"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -923,12 +972,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3025745b564e916884578dad8ce3c001d81bef31"
+                "reference": "8797d00644c2c11af952cc679584c62cf4e46bab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3025745b564e916884578dad8ce3c001d81bef31",
-                "reference": "3025745b564e916884578dad8ce3c001d81bef31",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8797d00644c2c11af952cc679584c62cf4e46bab",
+                "reference": "8797d00644c2c11af952cc679584c62cf4e46bab",
                 "shasum": ""
             },
             "require": {
@@ -997,7 +1046,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-13 21:21:47"
+            "time": "2016-12-20 14:51:03"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
