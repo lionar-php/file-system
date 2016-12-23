@@ -2,7 +2,7 @@
 
 namespace FileSystem\Drivers\Tests;
 
-use FileSystem\Drive;
+use FileSystem\Driver;
 use FileSystem\Drivers\Manager;
 use Mockery;
 use Testing\TestCase;
@@ -14,7 +14,7 @@ class ManagerTest extends TestCase
 	public function setUp ( )
 	{
 		$this->manager = new Manager;
-		$this->drive = Mockery::mock ( Drive::class );
+		$this->drive = Mockery::mock ( Driver::class );
 		$this->manager->add ( 'local', $this->drive );
 	}
 

@@ -2,14 +2,14 @@
 
 namespace FileSystem\Drivers;
 
-use FileSystem\Drive;
+use FileSystem\Driver;
 use FileSystem\Exceptions\DriveNotFoundException;
 
 class Manager
 {
 	private $mapping = array ( );
 
-	public function add ( $name, Drive $drive )
+	public function add ( $name, Driver $drive )
 	{
 		$this->mapping [ $name ] = $drive;
 	}
